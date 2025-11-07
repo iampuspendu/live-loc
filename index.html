@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Women Safety Tracker</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .bg {
+            background: url(https://i.ibb.co/87GbbFP/2799006.jpg) no-repeat;
+            background-size: cover;
+            height: 100%;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -3;
+        }
+        
+        .bg:before {
+            content: "";
+            width: 100%;
+            height: 100%;
+            background: #000;
+            position: fixed;
+            z-index: -1;
+            top: 0;
+            left: 0;
+            opacity: 0.3;
+        }
+        
+        .star-field {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            perspective: 600px;
+            -webkit-perspective: 600px;
+            z-index: -1;
+        }
+        
+        .star-field .layer {
+            box-shadow: -411px -476px #cccccc, 777px -407px #d4d4d4, -387px -477px #fcfcfc, -91px -235px #d4d4d4, 491px -460px #f7f7f7, 892px -128px #f7f7f7, 758px -277px #ededed, 596px 378px #cccccc, 647px 423px whitesmoke, 183px 389px #c7c7c7,
+                524px -237px #f0f0f0, 679px -535px #e3e3e3, 158px 399px #ededed, 157px 249px #ededed, 81px -450px #ebebeb, 719px -360px #c2c2c2, -499px 473px #e8e8e8, -158px -349px #d4d4d4, 870px -134px #cfcfcf, 446px 404px #c2c2c2,
+                440px 490px #d4d4d4, 414px 507px #e6e6e6, -12px 246px #fcfcfc, -384px 369px #e3e3e3, 641px -413px #fcfcfc, 822px 516px #dbdbdb, 449px 132px #c2c2c2, 727px 146px #f7f7f7, -315px -488px #e6e6e6, 952px -70px #e3e3e3,
+                -869px -29px #dbdbdb, 502px 80px #dedede, 764px 342px #e0e0e0, -150px -380px #dbdbdb, 654px -426px #e3e3e3, -325px -263px #c2c2c2, 755px -447px #c7c7c7, 729px -177px #c2c2c2, -682px -391px #e6e6e6, 554px -176px #ededed,
+                -85px -428px #d9d9d9, 714px 55px #e8e8e8, 359px -285px #cfcfcf, -362px -508px #dedede, 468px -265px #fcfcfc, 74px -500px #c7c7c7, -514px 383px #dbdbdb, 730px -92px #cfcfcf, -112px 287px #c9c9c9, -853px 79px #d6d6d6,
+                828px 475px #d6d6d6, -681px 13px #fafafa, -176px 209px #f0f0f0, 758px 457px #fafafa, -383px -454px #ededed, 813px 179px #d1d1d1, 608px 98px whitesmoke, -860px -65px #c4c4c4, -572px 272px #f7f7f7, 459px 533px #fcfcfc,
+                624px -481px #e6e6e6, 790px 477px #dedede, 731px -403px #ededed, 70px -534px #cccccc, -23px 510px #cfcfcf, -652px -237px whitesmoke, -690px 367px #d1d1d1, 810px 536px #d1d1d1, 774px 293px #c9c9c9, -362px 97px #c2c2c2,
+                563px 47px #dedede, 313px 475px #e0e0e0, 839px -491px #e3e3e3, -217px 377px #d4d4d4, -581px 239px #c2c2c2, -857px 72px #cccccc, -23px 340px #dedede, -837px 246px white, 170px -502px #cfcfcf, 822px -443px #e0e0e0, 795px 497px #e0e0e0,
+                -814px -337px #cfcfcf, 206px -339px #f2f2f2, -779px 108px #e6e6e6, 808px 2px #d4d4d4, 665px 41px #d4d4d4, -564px 64px #cccccc, -380px 74px #cfcfcf, -369px -60px #f7f7f7, 47px -495px #e3e3e3, -383px 368px #f7f7f7, 419px 288px #d1d1d1,
+                -598px -50px #c2c2c2, -833px 187px #c4c4c4, 378px 325px whitesmoke, -703px 375px #d6d6d6, 392px 520px #d9d9d9, -492px -60px #c4c4c4, 759px 288px #ebebeb, 98px -412px #c4c4c4, -911px -277px #c9c9c9;
+            transform-style: preserve-3d;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            height: 4px;
+            width: 4px;
+            border-radius: 2px;
+        }
+        
+        .star-field .layer:nth-child(1) {
+            animation: sf-fly-by-1 5s linear infinite;
+        }
+        
+        .star-field .layer:nth-child(2) {
+            animation: sf-fly-by-2 5s linear infinite;
+        }
+        
+        .star-field .layer:nth-child(3) {
+            animation: sf-fly-by-3 5s linear infinite;
+        }
+        
+        @keyframes sf-fly-by-1 {
+            from {
+                transform: translateZ(-600px);
+                opacity: 0.5;
+            }
+            to {
+                transform: translateZ(0);
+                opacity: 0.5;
+            }
+        }
+        
+        @keyframes sf-fly-by-2 {
+            from {
+                transform: translateZ(-1200px);
+                opacity: 0.5;
+            }
+            to {
+                transform: translateZ(-600px);
+                opacity: 0.5;
+            }
+        }
+        
+        @keyframes sf-fly-by-3 {
+            from {
+                transform: translateZ(-1800px);
+                opacity: 0.5;
+            }
+            to {
+                transform: translateZ(-1200px);
+                opacity: 0.5;
+            }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-in;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .header {
+            background: rgba(44, 62, 80, 0.8);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            padding: 25px;
+            background: rgba(248, 249, 250, 0.5);
+            border-bottom: 1px solid rgba(233, 236, 239, 0.5);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        .user-input {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .tracking-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #4285F4;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .action-btn:hover::before {
+            left: 100%;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(66, 133, 244, 0.3);
+        }
+        
+        .action-btn:active {
+            transform: translateY(0);
+        }
+        
+        .action-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .action-btn:disabled::before {
+            display: none;
+        }
+        
+        .btn-success {
+            background: #34A853;
+        }
+        
+        .btn-success:hover {
+            box-shadow: 0 5px 15px rgba(52, 168, 83, 0.3);
+        }
+        
+        .btn-danger {
+            background: #EA4335;
+        }
+        
+        .btn-danger:hover {
+            box-shadow: 0 5px 15px rgba(234, 67, 53, 0.3);
+        }
+        
+        .btn-share {
+            background: #9C27B0;
+        }
+        
+        .btn-share:hover {
+            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3);
+        }
+        
+        #map {
+            height: 500px;
+            width: 100%;
+            border: 1px solid rgba(233, 236, 239, 0.5);
+        }
+        
+        .status-panel {
+            padding: 20px;
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-connected { background: #34A853; }
+        .status-disconnected { background: #EA4335; }
+        .status-tracking { background: #FBBC05; }
+        
+        .location-info {
+            background: rgba(44, 62, 80, 0.8);
+            padding: 25px;
+            color: white;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .info-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #4285F4;
+        }
+        
+        .info-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+        
+        .alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 300px;
+        }
+        
+        .alert {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            animation: slideIn 0.3s ease;
+            font-size: 0.9em;
+            border-left: 4px solid;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .alert-success {
+            background: rgba(212, 237, 218, 0.9);
+            color: #155724;
+            border-color: #34A853;
+        }
+        
+        .alert-error {
+            background: rgba(248, 215, 218, 0.9);
+            color: #721c24;
+            border-color: #EA4335;
+        }
+        
+        .alert-warning {
+            background: rgba(255, 243, 205, 0.9);
+            color: #856404;
+            border-color: #FBBC05;
+        }
+        
+        .tracking-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: rgba(66, 133, 244, 0.1);
+            border-radius: 25px;
+            border: 2px solid #4285F4;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .map-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .google-maps-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            background: rgba(234, 67, 53, 0.1);
+            border-radius: 25px;
+            border: 2px solid #EA4335;
+            color: #EA4335;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        .google-maps-link:hover {
+            background: #EA4335;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(234, 67, 53, 0.3);
+        }
+        
+        .google-maps-link.disabled {
+            background: rgba(149, 165, 166, 0.1);
+            border-color: #95a5a6;
+            color: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .google-maps-link.disabled:hover {
+            background: rgba(149, 165, 166, 0.1);
+            color: #95a5a6;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        @media (max-width: 768px) {
+            .user-input {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .tracking-actions {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+            }
+            
+            .status-panel {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .map-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .google-maps-link, .btn-share {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            #map {
+                height: 400px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .controls {
+                padding: 15px;
+            }
+            
+            .status-panel {
+                padding: 15px;
+            }
+            
+            .location-info {
+                padding: 15px;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            #map {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg"></div>
+    
+    <div class="star-field">
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+    </div>
+    
+    <div class="alert-container" id="alertContainer"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>Women Safety Tracker</h1>
+            <p>Real-time Location Monitoring & Emergency Tracking</p>
+        </div>
+        
+        <div class="controls">
+            <div class="user-input">
+                <div class="tracking-actions">
+                    <button class="action-btn btn-success" onclick="startTracking()">
+                        Start Tracking
+                    </button>
+                    <button class="action-btn btn-danger" onclick="stopTracking()">
+                        Stop Tracking
+                    </button>
+                    <button class="action-btn" onclick="refreshLocation()">
+                        Refresh Now
+                    </button>
+                </div>
+                <div class="tracking-indicator" id="trackingIndicator">
+                    <div class="status-dot status-disconnected" id="statusDot"></div>
+                    <span id="trackingStatus">Not Tracking</span>
+                </div>
+                <div class="map-actions">
+                    <a href="#" id="googleMapsLink" class="google-maps-link disabled" target="_blank">
+                        Open with Google Maps
+                    </a>
+                    <button class="action-btn btn-share" onclick="shareLocation()">
+                        Share Location
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="map"></div>
+        
+        <div class="status-panel">
+            <div class="status-item">
+                <div class="status-dot status-disconnected" id="connectionDot"></div>
+                <div>
+                    <div style="font-size: 0.9em; opacity: 0.8;">Status</div>
+                    <div id="connectionStatus">Disconnected</div>
+                </div>
+            </div>
+            <div class="status-item">
+                <div style="font-size: 0.9em; opacity: 0.8;">User ID</div>
+                <div id="currentUserId">-</div>
+            </div>
+            <div class="status-item">
+                <div style="font-size: 0.9em; opacity: 0.8;">Last Update</div>
+                <div id="lastUpdate">Never</div>
+            </div>
+            <div class="status-item">
+                <div style="font-size: 0.9em; opacity: 0.8;">Map Provider</div>
+                <div id="mapProviderStatus">OpenStreetMap</div>
+            </div>
+        </div>
+        
+        <div class="location-info">
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Latitude</div>
+                    <div class="info-value" id="latValue">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Longitude</div>
+                    <div class="info-value" id="lngValue">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Accuracy</div>
+                    <div class="info-value" id="accuracyValue">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Address</div>
+                    <div class="info-value" id="addressValue">-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS (OpenStreetMap) -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // Configuration
+        const API_URL = 'https://jwki58wsv8.execute-api.ap-south-1.amazonaws.com/prod/location';
+        const TRACKING_INTERVAL = 8000; // 8 seconds
+        
+        // Map variables
+        let map;
+        let marker;
+        let trackingInterval;
+        let isTracking = false;
+        let lastAlertTime = 0;
+        const ALERT_COOLDOWN = 3000; // 3 seconds between similar alerts
+        let currentLat = null;
+        let currentLng = null;
+
+        // Custom icon for the marker
+        const safetyIcon = L.divIcon({
+            html: `
+                <div style="
+                    width: 40px;
+                    height: 40px;
+                    background: #FF4444;
+                    border-radius: 50%;
+                    border: 3px solid white;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                    animation: pulse 2s infinite;
+                ">🚨</div>
+            `,
+            iconSize: [40, 40],
+            iconAnchor: [20, 40],
+            className: 'safety-marker'
+        });
+
+        // Robust URL parameter parser
+        function getUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            const result = {};
+            for (const [key, value] of params) {
+                result[key] = value;
+            }
+            return result;
+        }
+
+        // Get user ID from URL parameters or use default
+        function getUserId() {
+            const urlParams = getUrlParams();
+            const userIdFromUrl = urlParams.userId || urlParams.userid || urlParams.id;
+            
+            if (userIdFromUrl) {
+                return userIdFromUrl;
+            }
+            
+            // Generate a random user ID if none provided
+            return 'user-' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Update URL with current user ID (without page reload)
+        function updateUrlWithUserId(userId) {
+            const newUrl = new URL(window.location);
+            newUrl.searchParams.set('userId', userId);
+            window.history.replaceState({}, '', newUrl);
+        }
+
+        // Initialize OpenStreetMap
+        function initMap() {
+            // Default center (India)
+            const defaultCenter = [20.5937, 78.9629];
+            
+            // Initialize the map
+            map = L.map('map').setView(defaultCenter, 5);
+            
+            // Add OpenStreetMap tiles with a nice style
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 18
+            }).addTo(map);
+            
+            // Create marker
+            marker = L.marker(defaultCenter, { icon: safetyIcon }).addTo(map);
+            
+            // Add a popup to the marker
+            marker.bindPopup("<b>User Location</b><br>Waiting for location data...").openPopup();
+            
+            // Initialize with URL parameters
+            initializeFromUrl();
+        }
+
+        function initializeFromUrl() {
+            const userId = getUserId();
+            
+            // Update URL to include userId if it came from URL
+            updateUrlWithUserId(userId);
+            
+            // Update display
+            document.getElementById('currentUserId').textContent = userId;
+            
+            // Auto-start tracking if user ID is provided via URL
+            const urlParams = getUrlParams();
+            if (urlParams.userId || urlParams.userid || urlParams.id) {
+                setTimeout(() => {
+                    startTracking();
+                }, 1000);
+            }
+        }
+        
+        async function fetchLocation() {
+            const userId = getUserId();
+            document.getElementById('currentUserId').textContent = userId;
+            
+            if (!userId) {
+                showAlert('User ID is required', 'error');
+                return;
+            }
+            
+            try {
+                updateConnectionStatus('Fetching...', 'warning');
+                
+                const response = await fetch(`${API_URL}?userId=${encodeURIComponent(userId)}`);
+                const apiResponse = await response.json();
+                
+                const data = JSON.parse(apiResponse.body);
+                
+                if (data.success && data.data) {
+                    updateLocationDisplay(data.data);
+                    updateConnectionStatus('Connected', 'success');
+                    // Only show success alert for first fetch or after errors
+                    if (!isTracking || document.getElementById('connectionDot').classList.contains('status-disconnected')) {
+                        showAlert('Location updated', 'success');
+                    }
+                } else {
+                    throw new Error(data.error || 'Location not found');
+                }
+                
+            } catch (error) {
+                console.error('Error fetching location:', error);
+                updateConnectionStatus('Failed', 'error');
+                showAlert('Failed: ' + error.message, 'error');
+            }
+        }
+        
+        function updateLocationDisplay(locationData) {
+            const lat = parseFloat(locationData.latitude);
+            const lng = parseFloat(locationData.longitude);
+            
+            // Store current coordinates for Google Maps link
+            currentLat = lat;
+            currentLng = lng;
+            
+            // Update map
+            const newPosition = [lat, lng];
+            marker.setLatLng(newPosition);
+            map.setView(newPosition, 15);
+            
+            // Add animation effect
+            marker.getElement().style.animation = 'pulse 1.5s';
+            setTimeout(() => {
+                marker.getElement().style.animation = '';
+            }, 1500);
+            
+            // Update marker popup
+            marker.bindPopup(`
+                <b>User Location</b><br>
+                <b>User:</b> ${getUserId()}<br>
+                <b>Lat:</b> ${lat.toFixed(6)}<br>
+                <b>Lng:</b> ${lng.toFixed(6)}<br>
+                <b>Time:</b> ${new Date().toLocaleString()}
+            `).openPopup();
+            
+            // Update info display
+            document.getElementById('latValue').textContent = lat.toFixed(6);
+            document.getElementById('lngValue').textContent = lng.toFixed(6);
+            document.getElementById('accuracyValue').textContent = 
+                locationData.accuracy ? `${Math.round(locationData.accuracy)}m` : 'Unknown';
+            
+            // Update the single Last Update timestamp
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
+
+            // Update Google Maps link
+            updateGoogleMapsLink(lat, lng);
+
+            // Get address from coordinates
+            getAddressFromLatLng(lat, lng);
+        }
+
+        function updateGoogleMapsLink(lat, lng) {
+            const googleMapsLink = document.getElementById('googleMapsLink');
+            if (lat && lng) {
+                const googleMapsUrl = `https://www.google.com/maps?q=${lat},${lng}&z=15`;
+                googleMapsLink.href = googleMapsUrl;
+                googleMapsLink.classList.remove('disabled');
+            } else {
+                googleMapsLink.classList.add('disabled');
+            }
+        }
+
+        function getAddressFromLatLng(lat, lng) {
+            // Use OpenStreetMap Nominatim API (free)
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.display_name) {
+                        document.getElementById('addressValue').textContent = data.display_name;
+                    } else {
+                        document.getElementById('addressValue').textContent = 'Address not available';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error getting address:', error);
+                    document.getElementById('addressValue').textContent = 'Address not available';
+                });
+        }
+        
+        function startTracking() {
+            if (isTracking) {
+                showAlert('Already tracking', 'warning');
+                return;
+            }
+            
+            const userId = getUserId();
+            if (!userId) {
+                showAlert('User ID is required', 'error');
+                return;
+            }
+
+            // Update URL with current user ID
+            updateUrlWithUserId(userId);
+            
+            isTracking = true;
+            trackingInterval = setInterval(fetchLocation, TRACKING_INTERVAL);
+            
+            document.getElementById('trackingStatus').textContent = 'Tracking Active';
+            document.getElementById('statusDot').className = 'status-dot status-tracking pulse';
+            updateConnectionStatus('Tracking', 'success');
+            showAlert('Tracking started', 'success');
+            
+            // Fetch first location immediately
+            fetchLocation();
+        }
+        
+        function stopTracking() {
+            if (!isTracking) {
+                showAlert('Not tracking', 'warning');
+                return;
+            }
+            
+            isTracking = false;
+            clearInterval(trackingInterval);
+            
+            document.getElementById('trackingStatus').textContent = 'Tracking Stopped';
+            document.getElementById('statusDot').className = 'status-dot status-disconnected';
+            updateConnectionStatus('Stopped', 'error');
+            showAlert('Tracking stopped', 'error');
+        }
+        
+        function refreshLocation() {
+            const userId = getUserId();
+            updateUrlWithUserId(userId);
+            fetchLocation();
+        }
+        
+        function shareLocation() {
+            const currentUrl = window.location.href;
+            
+            // Check if Web Share API is supported
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Women Safety Tracker',
+                    text: 'Track user location in real-time',
+                    url: currentUrl
+                })
+                .then(() => console.log('Shared successfully'))
+                .catch((error) => console.log('Error sharing:', error));
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(currentUrl)
+                    .then(() => {
+                        showAlert('Link copied to clipboard!', 'success');
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy: ', err);
+                        showAlert('Failed to copy link', 'error');
+                    });
+            }
+        }
+        
+        function updateConnectionStatus(message, type) {
+            const statusElement = document.getElementById('connectionStatus');
+            const dotElement = document.getElementById('connectionDot');
+            
+            statusElement.textContent = message;
+            
+            dotElement.className = 'status-dot ' + (
+                type === 'success' ? 'status-connected pulse' :
+                type === 'warning' ? 'status-tracking pulse' :
+                'status-disconnected'
+            );
+        }
+        
+        function showAlert(message, type) {
+            const now = Date.now();
+            if (now - lastAlertTime < ALERT_COOLDOWN) {
+                return; // Skip if too soon
+            }
+            lastAlertTime = now;
+            
+            const alertContainer = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            
+            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠️';
+            alert.innerHTML = `${icon} ${message}`;
+            
+            alertContainer.appendChild(alert);
+            
+            // Remove alert after 3 seconds
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.style.animation = 'slideIn 0.3s ease reverse';
+                    setTimeout(() => alert.remove(), 300);
+                }
+            }, 3000);
+        }
+
+        // Initialize the map when the page loads
+        document.addEventListener('DOMContentLoaded', initMap);
+    </script>
+</body>
+</html>
