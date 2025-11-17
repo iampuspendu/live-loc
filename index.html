@@ -15,6 +15,7 @@
       --accent:#2f78d8;
       --danger:#ea4335;
       --success:#34a853;
+      --warning:#fbbc04;
       --soft:#f4f6f7;
     }
 
@@ -27,7 +28,7 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      overflow: hidden; /* Prevent scrolling when modal is open */
+      overflow: hidden;
     }
 
     /* Login Modal Styles */
@@ -37,9 +38,8 @@
       left: 0;
       width: 100%;
       height: 100%;
-      /* Dark semi-transparent overlay to make the blur pop */
       background: rgba(0, 0, 0, 0.6); 
-      display: flex;
+      display: none; 
       align-items: center;
       justify-content: center;
       z-index: 1000;
@@ -47,16 +47,15 @@
       transition: opacity 0.3s ease;
     }
     
-    .login-modal.hidden {
-      pointer-events: none;
-      opacity: 0;
+    .login-modal.active {
+      display: flex; 
     }
 
     .login-container {
       background: linear-gradient(180deg,#28343f 0%, #23282b 100%);
       border-radius: 12px;
-      padding: 30px; /* Reduced padding */
-      width: 380px; /* Reduced width for better scaling */
+      padding: 30px;
+      width: 380px;
       box-shadow: 0 25px 70px rgba(0,0,0,0.6);
       border: 1px solid rgba(255,255,255,0.15);
       text-align: center;
@@ -71,7 +70,7 @@
     .login-logo h1 {
       color: white;
       margin: 0;
-      font-size: 24px; /* Slightly smaller */
+      font-size: 24px;
       font-weight: 600;
     }
     
@@ -132,6 +131,12 @@
     .login-btn:hover {
       background: #2563c7;
     }
+
+    .login-btn:disabled {
+      background: #4a5b6d;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
     
     .login-footer {
       margin-top: 20px;
@@ -139,9 +144,30 @@
       font-size: 12px;
     }
 
+    /* Error Message Style */
+    .login-error {
+      color: var(--danger);
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: -5px;
+      margin-bottom: 5px;
+      min-height: 18px;
+      display: none; 
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+    .shake {
+      animation: shake 0.3s ease-in-out;
+    }
+
     /* Card container */
     .dashboard{
-      /* Reduced width to mimic 80% zoom feel on 100% screen */
       width: 880px; 
       background: linear-gradient(180deg,#28343f 0%, #23282b 100%);
       border-radius: 10px;
@@ -149,11 +175,9 @@
       overflow:hidden;
       color:var(--soft);
       transition: filter 0.3s ease;
-      /* Dashboard is visible by default now, but blurred via JS class */
       display: block; 
     }
 
-    /* This class is added when modal is open */
     .dashboard.blurred-bg {
       filter: blur(8px) brightness(0.7);
       pointer-events: none;
@@ -165,7 +189,7 @@
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding:14px 20px; /* Compact padding */
+      padding:14px 20px;
       background: linear-gradient(180deg,#2b3b44,#263238);
       border-bottom:1px solid rgba(255,255,255,0.03);
     }
@@ -176,7 +200,7 @@
     }
     .dash-title h2{
       margin:0;
-      font-size:18px; /* Slightly smaller */
+      font-size:18px;
       letter-spacing:0.2px;
       font-weight:600;
       color:#fff;
@@ -199,16 +223,17 @@
       font-size: 13px;
       opacity:0.95;
     }
-    .icon-btn .dot{
-      width:8px;height:8px;background:#fff;border-radius:50%;
+    .icon-btn:hover {
+      background: rgba(255,255,255,0.05);
+      color: #fff;
     }
 
     /* Main content */
     .dash-main{
       display:grid;
-      grid-template-columns: 290px 1fr; /* Left col smaller */
-      gap:12px; /* Tighter gap */
-      padding:14px; /* Tighter padding */
+      grid-template-columns: 290px 1fr; 
+      gap:12px; 
+      padding:14px;
       align-items:start;
     }
 
@@ -216,13 +241,13 @@
     .left-col{
       display:flex;
       flex-direction:column;
-      gap:10px; /* Tighter gap */
+      gap:10px;
     }
 
     .card{
       background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
       border-radius:8px;
-      padding:12px; /* Tighter padding */
+      padding:12px;
       border:1px solid rgba(0,0,0,0.25);
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
     }
@@ -236,14 +261,7 @@
     .small-muted{ font-size:12px; color:var(--muted); margin-bottom:4px; }
 
     .device-row{ display:flex; gap:8px; align-items:center; }
-    .status-bullet{
-      width:12px;height:12px;border-radius:50%;display:inline-block;border:2px solid rgba(255,255,255,0.06);
-    }
-    .status-online{ background:var(--success); }
-    .status-offline{ background:var(--danger); }
-    .stat-line{ font-size:13px; color:var(--soft); margin:6px 0; }
 
-    /* Device card layout */
     .device-info {
       display: flex;
       flex-direction: column;
@@ -290,7 +308,7 @@
       background:#fff; border-radius:8px; padding:10px; box-shadow: 0 8px 20px rgba(0,0,0,0.18);
       border:1px solid rgba(0,0,0,0.06);
     }
-    #map{ height:180px; border-radius:6px; } /* Reduced Height */
+    #map{ height:180px; border-radius:6px; }
 
     .map-controls{ display:flex; gap:8px; margin-top:10px; align-items:center; }
     .btn{
@@ -302,16 +320,13 @@
     .btn-website{ background:#444; color:#fff; border:2px solid rgba(0,0,0,0.08); opacity:0.95; }
     .btn.disabled{ opacity:0.45; cursor:not-allowed; }
 
-    /* big placeholder below map */
     .placeholder{
       margin-top:0; height:140px; border-radius:8px; border:2px dashed rgba(255,255,255,0.06);
       display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.06); font-weight:700; font-size: 14px;
     }
 
-    /* status panel bottom row */
     .bottom-row{ padding:10px 18px; display:flex; gap:20px; align-items:center; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.03); color:var(--muted); font-size:12px; }
 
-    /* responsive */
     @media (max-width:900px){
       .dashboard{ width:96%; }
       .dash-main{ grid-template-columns: 1fr; }
@@ -330,7 +345,7 @@
 
       <div class="dash-actions">
         <div class="icon-btn" title="Share" onclick="shareUrl()">SHARE</div>
-        <div class="icon-btn" title="Profile" onclick="showUserInfo()">👤</div>
+        <div class="icon-btn" title="Information" onclick="showUserInfo()" style="font-size:18px;">ⓘ</div>
         <div class="icon-btn" title="Logout" onclick="logout()">LOGOUT</div>
       </div>
     </div>
@@ -418,10 +433,8 @@
 
           <div class="map-controls">
             <button id="refreshBtn" class="btn btn-refresh" onclick="refreshNow()">⟳ Refresh</button>
-
             <button id="dirBtn" class="btn btn-directions disabled" onclick="openDirections()">⤴ Directions</button>
-
-            <button id="websiteBtn" class="btn btn-website disabled" onclick="openWebsite()">🌐 Website</button>
+            <button id="websiteBtn" class="btn btn-website disabled" onclick="openWebsite()">🌐 unavailable</button>
           </div>
         </div>
 
@@ -445,7 +458,7 @@
   </div>
 
   <div id="loginModal" class="login-modal">
-    <div class="login-container">
+    <div class="login-container" id="loginContainer">
       <div class="login-logo">
         <h1>Public Safety System</h1>
         <p>Secure Location Tracking Dashboard</p>
@@ -463,7 +476,9 @@
           >
         </div>
         
-        <button type="submit" class="login-btn">Access Dashboard</button>
+        <div id="loginError" class="login-error">User not found</div>
+
+        <button type="submit" id="loginBtn" class="login-btn">Access Dashboard</button>
       </form>
       
       <div class="login-footer">
@@ -476,6 +491,8 @@
 
   <script>
     /**************** AUTHENTICATION SYSTEM *****************/
+    const API_URL = 'https://jwki58wsv8.execute-api.ap-south-1.amazonaws.com/prod/location';
+
     function getUrlParams(){
       return Object.fromEntries(new URLSearchParams(window.location.search).entries());
     }
@@ -492,31 +509,65 @@
       window.history.replaceState({}, '', u);
     }
     
-    function authenticateUser(userId) {
-      if (userId && userId.trim() !== '') {
+    async function verifyAndLogin(userId) {
+      const btn = document.getElementById('loginBtn');
+      const errorMsg = document.getElementById('loginError');
+      const container = document.getElementById('loginContainer');
+
+      errorMsg.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Verifying...';
+      container.classList.remove('shake');
+
+      try {
+        const response = await fetch(`${API_URL}?userId=${encodeURIComponent(userId)}`);
+        const json = await response.json();
+
+        let payload;
+        if(json && typeof json === 'object' && json.body){
+           try{ payload = typeof json.body === 'string' ? JSON.parse(json.body) : json.body; } catch(e){ payload = json.body; }
+        } else {
+           payload = json;
+        }
+
+        if (payload.success === false || payload.success === 'false' || payload.error || (!payload && !payload.data)) {
+            throw new Error("User not found");
+        }
+
         updateUrlUser(userId);
         
-        // UI State Changes for Login
-        document.getElementById('loginModal').classList.add('hidden');
-        // Remove the blur class from dashboard
+        document.getElementById('loginModal').classList.remove('active');
+        document.getElementById('loginModal').style.display = 'none';
         document.getElementById('dashboard').classList.remove('blurred-bg');
         
         initDashboard();
-        return true;
+        
+        btn.disabled = false;
+        btn.textContent = 'Access Dashboard';
+
+      } catch (err) {
+        console.log("Verification failed:", err);
+        errorMsg.style.display = 'block';
+        errorMsg.textContent = 'User not found';
+        container.classList.add('shake');
+        btn.disabled = false;
+        btn.textContent = 'Access Dashboard';
+        
+        setTimeout(() => {
+            container.classList.remove('shake');
+        }, 500);
       }
-      return false;
     }
     
     function logout() {
       if (confirm('Are you sure you want to logout?')) {
         updateUrlUser('');
         
-        // UI State Changes for Logout
-        document.getElementById('loginModal').classList.remove('hidden');
-        // Add the blur class back
+        document.getElementById('loginModal').style.display = 'flex'; 
         document.getElementById('dashboard').classList.add('blurred-bg');
-        
-        // Clear any intervals
+        document.getElementById('userIdInput').value = '';
+        document.getElementById('loginError').style.display = 'none';
+
         if (autoRefreshTimer) {
           clearInterval(autoRefreshTimer);
           autoRefreshTimer = null;
@@ -526,39 +577,31 @@
     
     function showUserInfo() {
       const userId = getUserId();
-      alert(`Current User ID: ${userId}\n\nTo change user, please logout and login with a different ID.`);
+      alert(`Current User ID: ${userId}\n\nPublic Safety Tracking System v2.0`);
     }
     
-    // Check for userId on page load
     document.addEventListener('DOMContentLoaded', () => {
-      // We must init the map immediately so it renders in the background for the blur effect
-      // even if user is not logged in
       initMap(); 
       
       const userId = getUserId();
-      if (userId) {
-        // User is already authenticated via URL
-        authenticateUser(userId);
-      } else {
-        // Ensure blur is on
-        document.getElementById('dashboard').classList.add('blurred-bg');
-      }
       
-      // Setup login form
       document.getElementById('loginForm').addEventListener('submit', (e) => {
         e.preventDefault();
-        const userId = document.getElementById('userIdInput').value.trim();
-        if (authenticateUser(userId)) {
-          // Success
-          document.getElementById('userIdInput').value = '';
-        } else {
-          alert('Please enter a valid User ID');
+        const inputId = document.getElementById('userIdInput').value.trim();
+        if(inputId) {
+            verifyAndLogin(inputId);
         }
       });
+
+      if (userId) {
+        document.getElementById('dashboard').classList.remove('blurred-bg');
+        initDashboard();
+      } else {
+        document.getElementById('loginModal').style.display = 'flex';
+      }
     });
 
     /**************** DASHBOARD FUNCTIONALITY *****************/
-    const API_URL = 'https://jwki58wsv8.execute-api.ap-south-1.amazonaws.com/prod/location';
     let autoRefreshIntervalMs = 5000;
     let autoRefreshTimer = null;
     const UNAVAIL = 'unavailable';
@@ -571,8 +614,16 @@
 
     /**************** HELPERS *****************/
     function setText(id, value){
-      document.getElementById(id).textContent = (value === undefined || value === null || value === '') ? UNAVAIL : value;
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.textContent = (value === undefined || value === null || value === '') ? UNAVAIL : value;
     }
+    
+    function setStatusText(htmlContent) {
+        const el = document.getElementById('deviceStatus');
+        if (el) el.innerHTML = htmlContent;
+    }
+    
     function setAttrDisabled(el, disabled){
       if(!el) return;
       if(disabled) el.classList.add('disabled'); else el.classList.remove('disabled');
@@ -588,7 +639,6 @@
           url: currentUrl
         })
         .catch(err => {
-          console.log('Error sharing:', err);
           fallbackShare(currentUrl);
         });
       } else {
@@ -606,7 +656,6 @@
 
     /**************** MAP INIT *****************/
     function initMap(){
-      // Prevent re-initialization
       if(map) return; 
 
       map = L.map('map', { zoomControl:true }).setView([20.5937,78.9629],5);
@@ -622,23 +671,17 @@
 
     /**************** DASHBOARD INIT *****************/
     function initDashboard(){
-      // Map is already inited in DOMContentLoaded
-      
       const userId = getUserId();
       if(userId){
         document.getElementById('bottomUser').textContent = userId;
         document.getElementById('deviceId').textContent = userId;
-        // fetch once and start if auto-refresh selected
         fetchAndApply();
       } else {
-        // show unavaille until login param provided
         applyUnavailableUI();
       }
 
-      // wire up initial selects/controls - set auto refresh to 5 seconds by default
       document.getElementById('autoRefreshSelect').value = '5000';
       
-      // Start auto refresh by default (5 seconds)
       if(!autoRefreshTimer) {
          autoRefreshTimer = setInterval(()=>{ fetchAndApply(); }, autoRefreshIntervalMs);
       }
@@ -652,20 +695,24 @@
         return;
       }
 
-      // show fetching small indicator
+      // 1. Set status to Fetching immediately
       setText('lastUpdated', 'Fetching...');
+      setStatusText('<span style="color:orange">Fetching...</span>');
 
       try{
         const resp = await fetch(`${API_URL}?userId=${encodeURIComponent(userId)}`);
         const j = await resp.json();
 
-        // handle AWS lambda style returns with body
         let payload;
         if(j && typeof j === 'object' && j.body){
           try{ payload = typeof j.body === 'string' ? JSON.parse(j.body) : j.body; } catch(e){ payload = j.body; }
         } else payload = j;
 
-        // expected shape: { success:true, data: { ... } }
+        if(payload.success === false || payload.error){
+              applyUnavailableUI(payload);
+              return;
+        }
+
         let data = payload && payload.data ? payload.data : payload;
 
         if(!data || Object.keys(data).length===0){
@@ -673,10 +720,8 @@
           return;
         }
 
-        // use provided timestamp field if present (string)
         const apiTimestamp = data.timestamp ?? data.time ?? data.ts ?? null;
 
-        // coordinates
         const lat = parseFloat(data.latitude ?? data.lat ?? NaN);
         const lng = parseFloat(data.longitude ?? data.lon ?? data.lng ?? NaN);
 
@@ -685,9 +730,30 @@
           return;
         }
 
+        // 2. Valid Data Received -> Set Status to Online
+        setStatusText('<span style="color:#34a853">Online</span>');
+
+        // *** MODIFIED LOGIC: Button becomes "Available" when Status is Online ***
+        const websiteBtn = document.getElementById('websiteBtn');
+        websiteBtn.classList.remove('disabled');
+        websiteBtn.textContent = '🌐 Available';
+        websiteBtn.style.backgroundColor = '#34a853'; // Green for Available
+        websiteBtn.style.borderColor = '#34a853';
+        
+        // If you still want the button to link to a website if provided:
+        if(data.website){
+           websiteBtn.onclick = () => {
+             const url = data.website.startsWith('http') ? data.website : 'https://'+data.website;
+             window.open(url, '_blank');
+           };
+        } else {
+           // If online but no website, it's just an indicator
+           websiteBtn.onclick = null; 
+        }
+        // *************************************************************************
+
         currentLat = lat; currentLng = lng;
 
-        // update map
         marker.setLatLng([lat,lng]);
         const acc = (data.accuracy !== undefined && data.accuracy !== null) ? Number(data.accuracy) : 0;
         accuracyCircle.setLatLng([lat,lng]);
@@ -697,26 +763,33 @@
           map.setView([lat,lng], 15, {animate:true});
         }
 
-        // popup
         marker.bindPopup(`<b>User:</b> ${userId}<br><b>Lat:</b> ${lat.toFixed(6)}<br><b>Lng:</b> ${lng.toFixed(6)}<br><b>Time:</b> ${apiTimestamp ? apiTimestamp : new Date().toLocaleString()}`).openPopup();
 
-        // Fill info fields (use UNAVAIL when missing)
         setText('deviceId', data.userId ?? userId);
         setText('bottomUser', data.userId ?? userId);
         setText('bottomDevice', data.device ?? UNAVAIL);
-        setText('deviceStatus', data.status ?? UNAVAIL);
+        
+        // --- BATTERY SECTION UPDATED ---
+        // Maps 'batteryPercentage' (new) or 'battery' (legacy)
+        const battLevel = data.batteryPercentage ?? data.battery;
+        // Maps 'isCharging' (new) or 'charging' (legacy)
+        const isCharging = data.isCharging ?? data.charging;
 
-        setText('batteryInfo', data.battery ? `${data.battery}% ${data.charging ? '(Charging)' : '(Not Charging)'}` : UNAVAIL);
+        if (battLevel !== undefined && battLevel !== null) {
+          const chargeStatus = isCharging ? '⚡ (Charging)' : '';
+          setText('batteryInfo', `${battLevel}% ${chargeStatus}`);
+        } else {
+          setText('batteryInfo', UNAVAIL);
+        }
+        // -------------------------------
 
         setText('latVal', lat.toFixed(6));
         setText('lngVal', lng.toFixed(6));
         setText('accVal', data.accuracy ? `${Math.round(data.accuracy)} meters` : UNAVAIL);
 
-        // address: use API field if present, otherwise reverse geocode from nominatim
         if(data.address) {
           setText('addrVal', data.address);
         } else {
-          // attempt nominatim reverse geocode
           fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
             .then(r=>r.json())
             .then(d=>{
@@ -727,7 +800,6 @@
             });
         }
 
-        // last update: prefer API timestamp
         if(apiTimestamp){
           const parsed = new Date(apiTimestamp);
           if(!isNaN(parsed.getTime())) setText('lastUpdated', parsed.toLocaleString());
@@ -738,25 +810,10 @@
 
         setText('bottomDevice', data.device ?? UNAVAIL);
 
-        // Enable / disable Get Directions and Website buttons
         const dirBtn = document.getElementById('dirBtn');
-        const websiteBtn = document.getElementById('websiteBtn');
 
         setAttrDisabled(dirBtn, false);
         dirBtn.onclick = openDirections;
-
-        if(data.website){
-          websiteBtn.classList.remove('disabled');
-          websiteBtn.onclick = () => {
-            const url = data.website.startsWith('http') ? data.website : 'https://'+data.website;
-            window.open(url, '_blank');
-          };
-          websiteBtn.textContent = '🌐 Website';
-        } else {
-          websiteBtn.classList.add('disabled');
-          websiteBtn.onclick = null;
-          websiteBtn.textContent = '🌐 unavailable';
-        }
 
       } catch(err){
         console.error('Fetch error', err);
@@ -769,8 +826,23 @@
       const uid = getUserId();
       setText('deviceId', data && data.userId ? data.userId : (uid || UNAVAIL));
       setText('bottomUser', data && data.userId ? data.userId : (uid || UNAVAIL));
-      setText('deviceStatus', data && data.status ? data.status : UNAVAIL);
-      setText('batteryInfo', data && data.battery ? `${data.battery}%` : UNAVAIL);
+      
+      // 3. Failure / Unavailable -> Set Status to Offline
+      setStatusText('<span style="color:#ea4335">Offline</span>');
+
+      // *** MODIFIED LOGIC: Button becomes "Unavailable" when Status is Offline ***
+      const websiteBtn = document.getElementById('websiteBtn');
+      websiteBtn.textContent = '🌐 Unavailable';
+      websiteBtn.classList.add('disabled');
+      websiteBtn.style.backgroundColor = '#444'; // Revert to grey
+      websiteBtn.style.borderColor = 'rgba(0,0,0,0.08)';
+      websiteBtn.onclick = null;
+      // ***************************************************************************
+
+      // Updated unavailable battery check
+      const batt = data ? (data.batteryPercentage ?? data.battery) : null;
+      setText('batteryInfo', batt !== null ? `${batt}%` : UNAVAIL);
+
       setText('latVal', UNAVAIL);
       setText('lngVal', UNAVAIL);
       setText('accVal', UNAVAIL);
@@ -779,7 +851,6 @@
       setText('bottomDevice', data && data.device ? data.device : UNAVAIL);
 
       setAttrDisabled(document.getElementById('dirBtn'), true);
-      setAttrDisabled(document.getElementById('websiteBtn'), true);
     }
 
     /**************** BUTTONS *****************/
@@ -792,6 +863,7 @@
         alert('Coordinates not available');
         return;
       }
+      // Fixed the directions URL to standard Google Maps format
       const url = `https://www.google.com/maps/dir/?api=1&destination=${currentLat},${currentLng}&travelmode=driving`;
       window.open(url, '_blank');
     }
