@@ -1,937 +1,914 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Women Safety Tracker</title>
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            overflow-x: hidden;
-        }
-        
-        .bg {
-            background: url(https://i.ibb.co/87GbbFP/2799006.jpg) no-repeat;
-            background-size: cover;
-            height: 100%;
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -3;
-        }
-        
-        .bg:before {
-            content: "";
-            width: 100%;
-            height: 100%;
-            background: #000;
-            position: fixed;
-            z-index: -1;
-            top: 0;
-            left: 0;
-            opacity: 0.3;
-        }
-        
-        .star-field {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            perspective: 600px;
-            -webkit-perspective: 600px;
-            z-index: -1;
-        }
-        
-        .star-field .layer {
-            box-shadow: -411px -476px #cccccc, 777px -407px #d4d4d4, -387px -477px #fcfcfc, -91px -235px #d4d4d4, 491px -460px #f7f7f7, 892px -128px #f7f7f7, 758px -277px #ededed, 596px 378px #cccccc, 647px 423px whitesmoke, 183px 389px #c7c7c7,
-                524px -237px #f0f0f0, 679px -535px #e3e3e3, 158px 399px #ededed, 157px 249px #ededed, 81px -450px #ebebeb, 719px -360px #c2c2c2, -499px 473px #e8e8e8, -158px -349px #d4d4d4, 870px -134px #cfcfcf, 446px 404px #c2c2c2,
-                440px 490px #d4d4d4, 414px 507px #e6e6e6, -12px 246px #fcfcfc, -384px 369px #e3e3e3, 641px -413px #fcfcfc, 822px 516px #dbdbdb, 449px 132px #c2c2c2, 727px 146px #f7f7f7, -315px -488px #e6e6e6, 952px -70px #e3e3e3,
-                -869px -29px #dbdbdb, 502px 80px #dedede, 764px 342px #e0e0e0, -150px -380px #dbdbdb, 654px -426px #e3e3e3, -325px -263px #c2c2c2, 755px -447px #c7c7c7, 729px -177px #c2c2c2, -682px -391px #e6e6e6, 554px -176px #ededed,
-                -85px -428px #d9d9d9, 714px 55px #e8e8e8, 359px -285px #cfcfcf, -362px -508px #dedede, 468px -265px #fcfcfc, 74px -500px #c7c7c7, -514px 383px #dbdbdb, 730px -92px #cfcfcf, -112px 287px #c9c9c9, -853px 79px #d6d6d6,
-                828px 475px #d6d6d6, -681px 13px #fafafa, -176px 209px #f0f0f0, 758px 457px #fafafa, -383px -454px #ededed, 813px 179px #d1d1d1, 608px 98px whitesmoke, -860px -65px #c4c4c4, -572px 272px #f7f7f7, 459px 533px #fcfcfc,
-                624px -481px #e6e6e6, 790px 477px #dedede, 731px -403px #ededed, 70px -534px #cccccc, -23px 510px #cfcfcf, -652px -237px whitesmoke, -690px 367px #d1d1d1, 810px 536px #d1d1d1, 774px 293px #c9c9c9, -362px 97px #c2c2c2,
-                563px 47px #dedede, 313px 475px #e0e0e0, 839px -491px #e3e3e3, -217px 377px #d4d4d4, -581px 239px #c2c2c2, -857px 72px #cccccc, -23px 340px #dedede, -837px 246px white, 170px -502px #cfcfcf, 822px -443px #e0e0e0, 795px 497px #e0e0e0,
-                -814px -337px #cfcfcf, 206px -339px #f2f2f2, -779px 108px #e6e6e6, 808px 2px #d4d4d4, 665px 41px #d4d4d4, -564px 64px #cccccc, -380px 74px #cfcfcf, -369px -60px #f7f7f7, 47px -495px #e3e3e3, -383px 368px #f7f7f7, 419px 288px #d1d1d1,
-                -598px -50px #c2c2c2, -833px 187px #c4c4c4, 378px 325px whitesmoke, -703px 375px #d6d6d6, 392px 520px #d9d9d9, -492px -60px #c4c4c4, 759px 288px #ebebeb, 98px -412px #c4c4c4, -911px -277px #c9c9c9;
-            transform-style: preserve-3d;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            height: 4px;
-            width: 4px;
-            border-radius: 2px;
-        }
-        
-        .star-field .layer:nth-child(1) {
-            animation: sf-fly-by-1 5s linear infinite;
-        }
-        
-        .star-field .layer:nth-child(2) {
-            animation: sf-fly-by-2 5s linear infinite;
-        }
-        
-        .star-field .layer:nth-child(3) {
-            animation: sf-fly-by-3 5s linear infinite;
-        }
-        
-        @keyframes sf-fly-by-1 {
-            from {
-                transform: translateZ(-600px);
-                opacity: 0.5;
-            }
-            to {
-                transform: translateZ(0);
-                opacity: 0.5;
-            }
-        }
-        
-        @keyframes sf-fly-by-2 {
-            from {
-                transform: translateZ(-1200px);
-                opacity: 0.5;
-            }
-            to {
-                transform: translateZ(-600px);
-                opacity: 0.5;
-            }
-        }
-        
-        @keyframes sf-fly-by-3 {
-            from {
-                transform: translateZ(-1800px);
-                opacity: 0.5;
-            }
-            to {
-                transform: translateZ(-1200px);
-                opacity: 0.5;
-            }
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-            animation: fadeIn 0.8s ease-in;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .header {
-            background: rgba(44, 62, 80, 0.8);
-            color: white;
-            padding: 30px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-        }
-        
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
-        
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-        
-        .controls {
-            padding: 25px;
-            background: rgba(248, 249, 250, 0.5);
-            border-bottom: 1px solid rgba(233, 236, 239, 0.5);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-        }
-        
-        .user-input {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        .tracking-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-            width: 100%;
-        }
-        
-        .action-btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: #4285F4;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .action-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.5s;
-        }
-        
-        .action-btn:hover::before {
-            left: 100%;
-        }
-        
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(66, 133, 244, 0.3);
-        }
-        
-        .action-btn:active {
-            transform: translateY(0);
-        }
-        
-        .action-btn:disabled {
-            background: #95a5a6;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .action-btn:disabled::before {
-            display: none;
-        }
-        
-        .btn-success {
-            background: #34A853;
-        }
-        
-        .btn-success:hover {
-            box-shadow: 0 5px 15px rgba(52, 168, 83, 0.3);
-        }
-        
-        .btn-danger {
-            background: #EA4335;
-        }
-        
-        .btn-danger:hover {
-            box-shadow: 0 5px 15px rgba(234, 67, 53, 0.3);
-        }
-        
-        .btn-share {
-            background: #9C27B0;
-        }
-        
-        .btn-share:hover {
-            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3);
-        }
-        
-        #map {
-            height: 500px;
-            width: 100%;
-            border: 1px solid rgba(233, 236, 239, 0.5);
-        }
-        
-        .status-panel {
-            padding: 20px;
-            background: rgba(52, 73, 94, 0.8);
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-        }
-        
-        .status-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .status-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-        
-        .status-connected { background: #34A853; }
-        .status-disconnected { background: #EA4335; }
-        .status-tracking { background: #FBBC05; }
-        
-        .location-info {
-            background: rgba(44, 62, 80, 0.8);
-            padding: 25px;
-            color: white;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-        }
-        
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-        }
-        
-        .info-item {
-            background: rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid #4285F4;
-        }
-        
-        .info-label {
-            font-size: 0.9em;
-            opacity: 0.8;
-            margin-bottom: 5px;
-        }
-        
-        .info-value {
-            font-size: 1.1em;
-            font-weight: 500;
-        }
-        
-        .alert-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            max-width: 300px;
-        }
-        
-        .alert {
-            padding: 12px 16px;
-            margin-bottom: 8px;
-            border-radius: 8px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-            animation: slideIn 0.3s ease;
-            font-size: 0.9em;
-            border-left: 4px solid;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        .alert-success {
-            background: rgba(212, 237, 218, 0.9);
-            color: #155724;
-            border-color: #34A853;
-        }
-        
-        .alert-error {
-            background: rgba(248, 215, 218, 0.9);
-            color: #721c24;
-            border-color: #EA4335;
-        }
-        
-        .alert-warning {
-            background: rgba(255, 243, 205, 0.9);
-            color: #856404;
-            border-color: #FBBC05;
-        }
-        
-        .tracking-indicator {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 15px;
-            background: rgba(66, 133, 244, 0.1);
-            border-radius: 25px;
-            border: 2px solid #4285F4;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-        
-        .map-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .google-maps-link {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 15px;
-            background: rgba(234, 67, 53, 0.1);
-            border-radius: 25px;
-            border: 2px solid #EA4335;
-            color: #EA4335;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-        }
-        
-        .google-maps-link:hover {
-            background: #EA4335;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(234, 67, 53, 0.3);
-        }
-        
-        .google-maps-link.disabled {
-            background: rgba(149, 165, 166, 0.1);
-            border-color: #95a5a6;
-            color: #95a5a6;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .google-maps-link.disabled:hover {
-            background: rgba(149, 165, 166, 0.1);
-            color: #95a5a6;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        @media (max-width: 768px) {
-            .user-input {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .tracking-actions {
-                flex-direction: column;
-            }
-            
-            .action-btn {
-                width: 100%;
-            }
-            
-            .status-panel {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .map-actions {
-                flex-direction: column;
-                width: 100%;
-            }
-            
-            .google-maps-link, .btn-share {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            #map {
-                height: 400px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-            
-            .header {
-                padding: 20px;
-            }
-            
-            .controls {
-                padding: 15px;
-            }
-            
-            .status-panel {
-                padding: 15px;
-            }
-            
-            .location-info {
-                padding: 15px;
-            }
-            
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            #map {
-                height: 350px;
-            }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Public Safety System</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <style>
+    :root{
+      --panel-bg:#2e3134;
+      --card-bg:#323639;
+      --muted:#bfc3c6;
+      --accent:#2f78d8;
+      --danger:#ea4335;
+      --success:#34a853;
+      --warning:#fbbc04;
+      --soft:#f4f6f7;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
+      background: #e6e6e6;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow: hidden;
+    }
+
+    /* Login Modal Styles */
+    .login-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6); 
+      display: none; 
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+    
+    .login-modal.active {
+      display: flex; 
+    }
+
+    .login-container {
+      background: linear-gradient(180deg,#28343f 0%, #23282b 100%);
+      border-radius: 12px;
+      padding: 30px;
+      width: 380px;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.15);
+      text-align: center;
+      position: relative;
+      z-index: 1001;
+    }
+    
+    .login-logo {
+      margin-bottom: 20px;
+    }
+    
+    .login-logo h1 {
+      color: white;
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    
+    .login-logo p {
+      color: var(--muted);
+      margin: 6px 0 0;
+      font-size: 13px;
+    }
+    
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .form-group {
+      text-align: left;
+    }
+    
+    .form-group label {
+      display: block;
+      color: var(--soft);
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      color: white;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: rgba(255,255,255,0.08);
+    }
+    
+    .login-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 5px;
+    }
+    
+    .login-btn:hover {
+      background: #2563c7;
+    }
+
+    .login-btn:disabled {
+      background: #4a5b6d;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    
+    .login-footer {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* Error Message Style */
+    .login-error {
+      color: var(--danger);
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: -5px;
+      margin-bottom: 5px;
+      min-height: 18px;
+      display: none; 
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+    .shake {
+      animation: shake 0.3s ease-in-out;
+    }
+
+    /* Card container */
+    .dashboard{
+      width: 880px; 
+      background: linear-gradient(180deg,#28343f 0%, #23282b 100%);
+      border-radius: 10px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+      overflow:hidden;
+      color:var(--soft);
+      transition: filter 0.3s ease;
+      display: block; 
+    }
+
+    .dashboard.blurred-bg {
+      filter: blur(8px) brightness(0.7);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* header */
+    .dash-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 20px;
+      background: linear-gradient(180deg,#2b3b44,#263238);
+      border-bottom:1px solid rgba(255,255,255,0.03);
+    }
+    .dash-title{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .dash-title h2{
+      margin:0;
+      font-size:18px;
+      letter-spacing:0.2px;
+      font-weight:600;
+      color:#fff;
+    }
+    .dash-actions{
+      display:flex;
+      gap:14px;
+      align-items:center;
+      color:rgba(255,255,255,0.9);
+      font-weight:600;
+    }
+    .icon-btn{
+      display:flex;
+      gap:6px;
+      align-items:center;
+      cursor:pointer;
+      padding:5px 8px;
+      border-radius:6px;
+      color:var(--soft);
+      font-size: 13px;
+      opacity:0.95;
+    }
+    .icon-btn:hover {
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+    }
+
+    /* Main content */
+    .dash-main{
+      display:grid;
+      grid-template-columns: 290px 1fr; 
+      gap:12px; 
+      padding:14px;
+      align-items:start;
+    }
+
+    /* left column cards */
+    .left-col{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border-radius:8px;
+      padding:12px;
+      border:1px solid rgba(0,0,0,0.25);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    }
+
+    .card h4{
+      margin:0 0 6px 0;
+      font-size:14px;
+      color:var(--soft);
+      font-weight: 600;
+    }
+    .small-muted{ font-size:12px; color:var(--muted); margin-bottom:4px; }
+
+    .device-row{ display:flex; gap:8px; align-items:center; }
+
+    .device-info {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .device-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 3px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .device-line:last-child {
+      border-bottom: none;
+    }
+    .device-label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .device-value {
+      font-size: 13px;
+      color: var(--soft);
+      font-weight: 500;
+    }
+
+    /* Location card */
+    .loc-grid{ font-size:13px; color:var(--soft); line-height:1.35; }
+
+    /* Settings card */
+    .setting-row{ display:flex; align-items:center; justify-content:space-between; padding:6px 0; }
+    .toggle{
+      width:34px; height:18px; border-radius:20px; background:rgba(255,255,255,0.07);
+      position:relative; cursor:pointer;
+    }
+    .toggle .dot{ width:14px;height:14px;background:#fff;border-radius:50%; position:absolute; top:2px; left:2px; transition:all .18s;}
+    .toggle.on{ background:var(--accent); }
+    .toggle.on .dot{ left:18px; }
+
+    /* right column: map card and placeholder */
+    .map-card{
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .map-frame{
+      background:#fff; border-radius:8px; padding:10px; box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+      border:1px solid rgba(0,0,0,0.06);
+    }
+    #map{ height:180px; border-radius:6px; }
+
+    .map-controls{ display:flex; gap:8px; margin-top:10px; align-items:center; }
+    .btn{
+      display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border-radius:6px; border:none; cursor:pointer;
+      font-weight:700; font-size:13px;
+    }
+    .btn-refresh{ background:#2f78d8; color:#fff; border:2px solid rgba(0,0,0,0.06); }
+    .btn-directions{ background:transparent; color:#2f78d8; border:2px solid rgba(47,120,216,0.15); box-shadow:none; }
+    .btn-website{ background:#444; color:#fff; border:2px solid rgba(0,0,0,0.08); opacity:0.95; }
+    .btn.disabled{ opacity:0.45; cursor:not-allowed; }
+
+    .placeholder{
+      margin-top:0; height:140px; border-radius:8px; border:2px dashed rgba(255,255,255,0.06);
+      display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.06); font-weight:700; font-size: 14px;
+    }
+
+    .bottom-row{ padding:10px 18px; display:flex; gap:20px; align-items:center; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.03); color:var(--muted); font-size:12px; }
+
+    @media (max-width:900px){
+      .dashboard{ width:96%; }
+      .dash-main{ grid-template-columns: 1fr; }
+      .left-col{ order:2 }
+      .map-card{ order:1 }
+    }
+  </style>
 </head>
 <body>
-    <div class="bg"></div>
-    
-    <div class="star-field">
-        <div class="layer"></div>
-        <div class="layer"></div>
-        <div class="layer"></div>
-    </div>
-    
-    <div class="alert-container" id="alertContainer"></div>
-    
-    <div class="container">
-        <div class="header">
-            <h1>Women Safety Tracker</h1>
-            <p>Real-time Location Monitoring & Emergency Tracking</p>
-        </div>
-        
-        <div class="controls">
-            <div class="user-input">
-                <div class="tracking-actions">
-                    <button class="action-btn btn-success" onclick="startTracking()">
-                        Start Tracking
-                    </button>
-                    <button class="action-btn btn-danger" onclick="stopTracking()">
-                        Stop Tracking
-                    </button>
-                    <button class="action-btn" onclick="refreshLocation()">
-                        Refresh Now
-                    </button>
-                </div>
-                <div class="tracking-indicator" id="trackingIndicator">
-                    <div class="status-dot status-disconnected" id="statusDot"></div>
-                    <span id="trackingStatus">Not Tracking</span>
-                </div>
-                <div class="map-actions">
-                    <a href="#" id="googleMapsLink" class="google-maps-link disabled" target="_blank">
-                        Open with Google Maps
-                    </a>
-                    <button class="action-btn btn-share" onclick="shareLocation()">
-                        Share Location
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <div id="map"></div>
-        
-        <div class="status-panel">
-            <div class="status-item">
-                <div class="status-dot status-disconnected" id="connectionDot"></div>
-                <div>
-                    <div style="font-size: 0.9em; opacity: 0.8;">Status</div>
-                    <div id="connectionStatus">Disconnected</div>
-                </div>
-            </div>
-            <div class="status-item">
-                <div style="font-size: 0.9em; opacity: 0.8;">User ID</div>
-                <div id="currentUserId">-</div>
-            </div>
-            <div class="status-item">
-                <div style="font-size: 0.9em; opacity: 0.8;">Last Update</div>
-                <div id="lastUpdate">Never</div>
-            </div>
-            <div class="status-item">
-                <div style="font-size: 0.9em; opacity: 0.8;">Map Provider</div>
-                <div id="mapProviderStatus">OpenStreetMap</div>
-            </div>
-        </div>
-        
-        <div class="location-info">
-            <div class="info-grid">
-                <div class="info-item">
-                    <div class="info-label">Latitude</div>
-                    <div class="info-value" id="latValue">-</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Longitude</div>
-                    <div class="info-value" id="lngValue">-</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Accuracy</div>
-                    <div class="info-value" id="accuracyValue">-</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Address</div>
-                    <div class="info-value" id="addressValue">-</div>
-                </div>
-            </div>
-        </div>
+
+  <div class="dashboard blurred-bg" id="dashboard">
+    <div class="dash-header">
+      <div class="dash-title">
+        <h2>Public Safety System</h2>
+      </div>
+
+      <div class="dash-actions">
+        <div class="icon-btn" title="Share" onclick="shareUrl()">SHARE</div>
+        <div class="icon-btn" title="Information" onclick="showUserInfo()" style="font-size:18px;">ⓘ</div>
+        <div class="icon-btn" title="Logout" onclick="logout()">LOGOUT</div>
+      </div>
     </div>
 
-    <!-- Leaflet JS (OpenStreetMap) -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
-    <script>
-        // Configuration
-        const API_URL = 'https://jwki58wsv8.execute-api.ap-south-1.amazonaws.com/prod/location';
-        const TRACKING_INTERVAL = 8000; // 8 seconds
-        
-        // Map variables
-        let map;
-        let marker;
-        let trackingInterval;
-        let isTracking = false;
-        let lastAlertTime = 0;
-        const ALERT_COOLDOWN = 3000; // 3 seconds between similar alerts
-        let currentLat = null;
-        let currentLng = null;
+    <div class="dash-main">
+      <div class="left-col">
+        <div class="card">
+          <h4>Device</h4>
+          <div class="device-info">
+            <div class="device-line">
+              <span class="device-label">Device ID:</span>
+              <span class="device-value" id="deviceId">unavailable</span>
+            </div>
+            <div class="device-line">
+              <span class="device-label">Status:</span>
+              <span class="device-value" id="deviceStatus">unavailable</span>
+            </div>
+            <div class="device-line">
+              <span class="device-label">Battery:</span>
+              <span class="device-value" id="batteryInfo">unavailable</span>
+            </div>
+          </div>
+        </div>
 
-        // Custom icon for the marker
-        const safetyIcon = L.divIcon({
-            html: `
-                <div style="
-                    width: 40px;
-                    height: 40px;
-                    background: #FF4444;
-                    border-radius: 50%;
-                    border: 3px solid white;
-                    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: white;
-                    font-weight: bold;
-                    animation: pulse 2s infinite;
-                ">🚨</div>
-            `,
-            iconSize: [40, 40],
-            iconAnchor: [20, 40],
-            className: 'safety-marker'
+        <div class="card">
+          <h4>Location</h4>
+          <div class="loc-grid">
+            <div><span class="small-muted">Last Updated:</span> <span id="lastUpdated">unavailable</span></div>
+            <div><span class="small-muted">Latitude:</span> <span id="latVal">unavailable</span></div>
+            <div><span class="small-muted">Longitude:</span> <span id="lngVal">unavailable</span></div>
+            <div><span class="small-muted">Accuracy:</span> <span id="accVal">unavailable</span></div>
+            <div style="margin-top:6px"><span class="small-muted">Address:</span>
+              <div id="addrVal" style="margin-top:4px;color:var(--soft);">unavailable</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>Settings</h4>
+
+          <div class="setting-row">
+            <div>
+              <div class="small-muted">Auto Scroll</div>
+            </div>
+            <div>
+              <div id="autoScrollToggle" class="toggle" onclick="toggleAutoScroll()"><div class="dot"></div></div>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <div class="small-muted">Device Path History</div>
+            </div>
+            <div>
+              <div id="historyToggle" class="toggle" onclick="toggleHistory()"><div class="dot"></div></div>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
+            <div>
+              <div class="small-muted">Auto Refresh</div>
+            </div>
+            <div>
+              <select id="autoRefreshSelect" style="padding:4px 8px;border-radius:6px;border:none;background:#fff;font-weight:700;font-size:12px" onchange="changeAutoRefresh()">
+                <option value="0">Off</option>
+                <option value="5000" selected>5 sec</option>
+                <option value="10000">10 sec</option>
+                <option value="60000">1 min</option>
+                <option value="900000">15 min</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="map-card">
+        <div class="map-frame">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-weight:800;color:#333;font-size:13px;">OpenStreetMap</div>
+            <div style="font-size:11px;color:#666">Map Provider</div>
+          </div>
+
+          <div id="map"></div>
+
+          <div class="map-controls">
+            <button id="refreshBtn" class="btn btn-refresh" onclick="refreshNow()">⟳ Refresh</button>
+            <button id="dirBtn" class="btn btn-directions disabled" onclick="openDirections()">⤴ Directions</button>
+            <button id="websiteBtn" class="btn btn-website disabled" onclick="openWebsite()">🌐 unavailable</button>
+          </div>
+        </div>
+
+        <div class="placeholder">
+          DEVICE PATH / EXTRA PANEL
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-row">
+      <div>
+        <strong style="color:var(--soft)">User ID:</strong> <span id="bottomUser">unavailable</span>
+      </div>
+      <div>
+        <strong style="color:var(--soft)">Map Provider:</strong> OpenStreetMap
+      </div>
+      <div>
+        <strong style="color:var(--soft)">Device:</strong> <span id="bottomDevice">unavailable</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="loginModal" class="login-modal">
+    <div class="login-container" id="loginContainer">
+      <div class="login-logo">
+        <h1>Public Safety System</h1>
+        <p>Secure Location Tracking Dashboard</p>
+      </div>
+      
+      <form id="loginForm" class="login-form">
+        <div class="form-group">
+          <label for="userIdInput">User ID</label>
+          <input 
+            type="text" 
+            id="userIdInput" 
+            placeholder="Enter your User ID" 
+            required
+            autocomplete="off"
+          >
+        </div>
+        
+        <div id="loginError" class="login-error">User not found</div>
+
+        <button type="submit" id="loginBtn" class="login-btn">Access Dashboard</button>
+      </form>
+      
+      <div class="login-footer">
+        Enter your assigned User ID to access the tracking system
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    /**************** AUTHENTICATION SYSTEM *****************/
+    const API_URL = 'https://jwki58wsv8.execute-api.ap-south-1.amazonaws.com/prod/location';
+
+    function getUrlParams(){
+      return Object.fromEntries(new URLSearchParams(window.location.search).entries());
+    }
+    
+    function getUserId(){
+      const p = getUrlParams();
+      return p.userId || p.userid || p.id || null;
+    }
+    
+    function updateUrlUser(userId){
+      const u = new URL(window.location);
+      if(userId) u.searchParams.set('userId', userId); 
+      else u.searchParams.delete('userId');
+      window.history.replaceState({}, '', u);
+    }
+    
+    async function verifyAndLogin(userId) {
+      const btn = document.getElementById('loginBtn');
+      const errorMsg = document.getElementById('loginError');
+      const container = document.getElementById('loginContainer');
+
+      errorMsg.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Verifying...';
+      container.classList.remove('shake');
+
+      try {
+        const response = await fetch(`${API_URL}?userId=${encodeURIComponent(userId)}`);
+        const json = await response.json();
+
+        let payload;
+        if(json && typeof json === 'object' && json.body){
+           try{ payload = typeof json.body === 'string' ? JSON.parse(json.body) : json.body; } catch(e){ payload = json.body; }
+        } else {
+           payload = json;
+        }
+
+        if (payload.success === false || payload.success === 'false' || payload.error || (!payload && !payload.data)) {
+            throw new Error("User not found");
+        }
+
+        updateUrlUser(userId);
+        
+        document.getElementById('loginModal').classList.remove('active');
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('dashboard').classList.remove('blurred-bg');
+        
+        initDashboard();
+        
+        btn.disabled = false;
+        btn.textContent = 'Access Dashboard';
+
+      } catch (err) {
+        console.log("Verification failed:", err);
+        errorMsg.style.display = 'block';
+        errorMsg.textContent = 'User not found';
+        container.classList.add('shake');
+        btn.disabled = false;
+        btn.textContent = 'Access Dashboard';
+        
+        setTimeout(() => {
+            container.classList.remove('shake');
+        }, 500);
+      }
+    }
+    
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        updateUrlUser('');
+        
+        document.getElementById('loginModal').style.display = 'flex'; 
+        document.getElementById('dashboard').classList.add('blurred-bg');
+        document.getElementById('userIdInput').value = '';
+        document.getElementById('loginError').style.display = 'none';
+
+        if (autoRefreshTimer) {
+          clearInterval(autoRefreshTimer);
+          autoRefreshTimer = null;
+        }
+      }
+    }
+    
+    function showUserInfo() {
+      const userId = getUserId();
+      alert(`Current User ID: ${userId}\n\nPublic Safety Tracking System v2.0`);
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      initMap(); 
+      
+      const userId = getUserId();
+      
+      document.getElementById('loginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const inputId = document.getElementById('userIdInput').value.trim();
+        if(inputId) {
+            verifyAndLogin(inputId);
+        }
+      });
+
+      if (userId) {
+        document.getElementById('dashboard').classList.remove('blurred-bg');
+        initDashboard();
+      } else {
+        document.getElementById('loginModal').style.display = 'flex';
+      }
+    });
+
+    /**************** DASHBOARD FUNCTIONALITY *****************/
+    let autoRefreshIntervalMs = 5000;
+    let autoRefreshTimer = null;
+    const UNAVAIL = 'unavailable';
+
+    /**************** STATE *****************/
+    let map, marker, accuracyCircle;
+    let currentLat=null, currentLng=null;
+    let isAutoScroll = false;
+    let showHistory = false;
+
+    /**************** HELPERS *****************/
+    function setText(id, value){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.textContent = (value === undefined || value === null || value === '') ? UNAVAIL : value;
+    }
+    
+    function setStatusText(htmlContent) {
+        const el = document.getElementById('deviceStatus');
+        if (el) el.innerHTML = htmlContent;
+    }
+    
+    function setAttrDisabled(el, disabled){
+      if(!el) return;
+      if(disabled) el.classList.add('disabled'); else el.classList.remove('disabled');
+    }
+
+    /**************** SHARE FUNCTIONALITY *****************/
+    function shareUrl(){
+      const currentUrl = window.location.href;
+      if (navigator.share) {
+        navigator.share({
+          title: 'Public Safety System',
+          text: 'Check out this public safety system location tracker',
+          url: currentUrl
+        })
+        .catch(err => {
+          fallbackShare(currentUrl);
         });
+      } else {
+        fallbackShare(currentUrl);
+      }
+    }
 
-        // Robust URL parameter parser
-        function getUrlParams() {
-            const params = new URLSearchParams(window.location.search);
-            const result = {};
-            for (const [key, value] of params) {
-                result[key] = value;
-            }
-            return result;
+    function fallbackShare(url) {
+      navigator.clipboard.writeText(url).then(() => {
+        alert('URL copied to clipboard: ' + url);
+      }).catch(err => {
+        prompt('Copy this URL to share:', url);
+      });
+    }
+
+    /**************** MAP INIT *****************/
+    function initMap(){
+      if(map) return; 
+
+      map = L.map('map', { zoomControl:true }).setView([20.5937,78.9629],5);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom:19,
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+
+      marker = L.marker([20.5937,78.9629]).addTo(map);
+      accuracyCircle = L.circle([20.5937,78.9629], {radius:0, color:'#2f78d8', opacity:0.2, fillOpacity:0.06}).addTo(map);
+    }
+
+    /**************** DASHBOARD INIT *****************/
+    function initDashboard(){
+      const userId = getUserId();
+      if(userId){
+        document.getElementById('bottomUser').textContent = userId;
+        document.getElementById('deviceId').textContent = userId;
+        fetchAndApply();
+      } else {
+        applyUnavailableUI();
+      }
+
+      document.getElementById('autoRefreshSelect').value = '5000';
+      
+      if(!autoRefreshTimer) {
+         autoRefreshTimer = setInterval(()=>{ fetchAndApply(); }, autoRefreshIntervalMs);
+      }
+    }
+
+    /**************** FETCH API *****************/
+    async function fetchAndApply(){
+      const userId = getUserId();
+      if(!userId){
+        applyUnavailableUI();
+        return;
+      }
+
+      // 1. Set status to Fetching immediately
+      setText('lastUpdated', 'Fetching...');
+      setStatusText('<span style="color:orange">Fetching...</span>');
+
+      try{
+        const resp = await fetch(`${API_URL}?userId=${encodeURIComponent(userId)}`);
+        const j = await resp.json();
+
+        let payload;
+        if(j && typeof j === 'object' && j.body){
+          try{ payload = typeof j.body === 'string' ? JSON.parse(j.body) : j.body; } catch(e){ payload = j.body; }
+        } else payload = j;
+
+        if(payload.success === false || payload.error){
+              applyUnavailableUI(payload);
+              return;
         }
 
-        // Get user ID from URL parameters or use default
-        function getUserId() {
-            const urlParams = getUrlParams();
-            const userIdFromUrl = urlParams.userId || urlParams.userid || urlParams.id;
-            
-            if (userIdFromUrl) {
-                return userIdFromUrl;
-            }
-            
-            // Generate a random user ID if none provided
-            return 'user-' + Math.random().toString(36).substr(2, 9);
+        let data = payload && payload.data ? payload.data : payload;
+
+        if(!data || Object.keys(data).length===0){
+          applyUnavailableUI();
+          return;
         }
 
-        // Update URL with current user ID (without page reload)
-        function updateUrlWithUserId(userId) {
-            const newUrl = new URL(window.location);
-            newUrl.searchParams.set('userId', userId);
-            window.history.replaceState({}, '', newUrl);
+        const apiTimestamp = data.timestamp ?? data.time ?? data.ts ?? null;
+
+        const lat = parseFloat(data.latitude ?? data.lat ?? NaN);
+        const lng = parseFloat(data.longitude ?? data.lon ?? data.lng ?? NaN);
+
+        if(!isFinite(lat) || !isFinite(lng)){
+          applyUnavailableUI(data);
+          return;
         }
 
-        // Initialize OpenStreetMap
-        function initMap() {
-            // Default center (India)
-            const defaultCenter = [20.5937, 78.9629];
-            
-            // Initialize the map
-            map = L.map('map').setView(defaultCenter, 5);
-            
-            // Add OpenStreetMap tiles with a nice style
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                maxZoom: 18
-            }).addTo(map);
-            
-            // Create marker
-            marker = L.marker(defaultCenter, { icon: safetyIcon }).addTo(map);
-            
-            // Add a popup to the marker
-            marker.bindPopup("<b>User Location</b><br>Waiting for location data...").openPopup();
-            
-            // Initialize with URL parameters
-            initializeFromUrl();
-        }
+        // 2. Valid Data Received -> Set Status to Online
+        setStatusText('<span style="color:#34a853">Online</span>');
 
-        function initializeFromUrl() {
-            const userId = getUserId();
-            
-            // Update URL to include userId if it came from URL
-            updateUrlWithUserId(userId);
-            
-            // Update display
-            document.getElementById('currentUserId').textContent = userId;
-            
-            // Auto-start tracking if user ID is provided via URL
-            const urlParams = getUrlParams();
-            if (urlParams.userId || urlParams.userid || urlParams.id) {
-                setTimeout(() => {
-                    startTracking();
-                }, 1000);
-            }
-        }
+        // *** MODIFIED LOGIC: Button becomes "Available" when Status is Online ***
+        const websiteBtn = document.getElementById('websiteBtn');
+        websiteBtn.classList.remove('disabled');
+        websiteBtn.textContent = '🌐 Available';
+        websiteBtn.style.backgroundColor = '#34a853'; // Green for Available
+        websiteBtn.style.borderColor = '#34a853';
         
-        async function fetchLocation() {
-            const userId = getUserId();
-            document.getElementById('currentUserId').textContent = userId;
-            
-            if (!userId) {
-                showAlert('User ID is required', 'error');
-                return;
-            }
-            
-            try {
-                updateConnectionStatus('Fetching...', 'warning');
-                
-                const response = await fetch(`${API_URL}?userId=${encodeURIComponent(userId)}`);
-                const apiResponse = await response.json();
-                
-                const data = JSON.parse(apiResponse.body);
-                
-                if (data.success && data.data) {
-                    updateLocationDisplay(data.data);
-                    updateConnectionStatus('Connected', 'success');
-                    // Only show success alert for first fetch or after errors
-                    if (!isTracking || document.getElementById('connectionDot').classList.contains('status-disconnected')) {
-                        showAlert('Location updated', 'success');
-                    }
-                } else {
-                    throw new Error(data.error || 'Location not found');
-                }
-                
-            } catch (error) {
-                console.error('Error fetching location:', error);
-                updateConnectionStatus('Failed', 'error');
-                showAlert('Failed: ' + error.message, 'error');
-            }
+        // If you still want the button to link to a website if provided:
+        if(data.website){
+           websiteBtn.onclick = () => {
+             const url = data.website.startsWith('http') ? data.website : 'https://'+data.website;
+             window.open(url, '_blank');
+           };
+        } else {
+           // If online but no website, it's just an indicator
+           websiteBtn.onclick = null; 
         }
-        
-        function updateLocationDisplay(locationData) {
-            const lat = parseFloat(locationData.latitude);
-            const lng = parseFloat(locationData.longitude);
-            
-            // Store current coordinates for Google Maps link
-            currentLat = lat;
-            currentLng = lng;
-            
-            // Update map
-            const newPosition = [lat, lng];
-            marker.setLatLng(newPosition);
-            map.setView(newPosition, 15);
-            
-            // Add animation effect
-            marker.getElement().style.animation = 'pulse 1.5s';
-            setTimeout(() => {
-                marker.getElement().style.animation = '';
-            }, 1500);
-            
-            // Update marker popup
-            marker.bindPopup(`
-                <b>User Location</b><br>
-                <b>User:</b> ${getUserId()}<br>
-                <b>Lat:</b> ${lat.toFixed(6)}<br>
-                <b>Lng:</b> ${lng.toFixed(6)}<br>
-                <b>Time:</b> ${new Date().toLocaleString()}
-            `).openPopup();
-            
-            // Update info display
-            document.getElementById('latValue').textContent = lat.toFixed(6);
-            document.getElementById('lngValue').textContent = lng.toFixed(6);
-            document.getElementById('accuracyValue').textContent = 
-                locationData.accuracy ? `${Math.round(locationData.accuracy)}m` : 'Unknown';
-            
-            // Update the single Last Update timestamp
-            document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
+        // *************************************************************************
 
-            // Update Google Maps link
-            updateGoogleMapsLink(lat, lng);
+        currentLat = lat; currentLng = lng;
 
-            // Get address from coordinates
-            getAddressFromLatLng(lat, lng);
+        marker.setLatLng([lat,lng]);
+        const acc = (data.accuracy !== undefined && data.accuracy !== null) ? Number(data.accuracy) : 0;
+        accuracyCircle.setLatLng([lat,lng]);
+        accuracyCircle.setRadius(acc || 0);
+
+        if(isAutoScroll){
+          map.setView([lat,lng], 15, {animate:true});
         }
 
-        function updateGoogleMapsLink(lat, lng) {
-            const googleMapsLink = document.getElementById('googleMapsLink');
-            if (lat && lng) {
-                const googleMapsUrl = `https://www.google.com/maps?q=${lat},${lng}&z=15`;
-                googleMapsLink.href = googleMapsUrl;
-                googleMapsLink.classList.remove('disabled');
-            } else {
-                googleMapsLink.classList.add('disabled');
-            }
+        marker.bindPopup(`<b>User:</b> ${userId}<br><b>Lat:</b> ${lat.toFixed(6)}<br><b>Lng:</b> ${lng.toFixed(6)}<br><b>Time:</b> ${apiTimestamp ? apiTimestamp : new Date().toLocaleString()}`).openPopup();
+
+        setText('deviceId', data.userId ?? userId);
+        setText('bottomUser', data.userId ?? userId);
+        setText('bottomDevice', data.device ?? UNAVAIL);
+        
+        // --- BATTERY SECTION UPDATED ---
+        // Maps 'batteryPercentage' (new) or 'battery' (legacy)
+        const battLevel = data.batteryPercentage ?? data.battery;
+        // Maps 'isCharging' (new) or 'charging' (legacy)
+        const isCharging = data.isCharging ?? data.charging;
+
+        if (battLevel !== undefined && battLevel !== null) {
+          const chargeStatus = isCharging ? '⚡ (Charging)' : '';
+          setText('batteryInfo', `${battLevel}% ${chargeStatus}`);
+        } else {
+          setText('batteryInfo', UNAVAIL);
+        }
+        // -------------------------------
+
+        setText('latVal', lat.toFixed(6));
+        setText('lngVal', lng.toFixed(6));
+        setText('accVal', data.accuracy ? `${Math.round(data.accuracy)} meters` : UNAVAIL);
+
+        if(data.address) {
+          setText('addrVal', data.address);
+        } else {
+          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
+            .then(r=>r.json())
+            .then(d=>{
+              const disp = d && d.display_name ? d.display_name : UNAVAIL;
+              document.getElementById('addrVal').textContent = disp;
+            }).catch(err=>{
+              document.getElementById('addrVal').textContent = UNAVAIL;
+            });
         }
 
-        function getAddressFromLatLng(lat, lng) {
-            // Use OpenStreetMap Nominatim API (free)
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.display_name) {
-                        document.getElementById('addressValue').textContent = data.display_name;
-                    } else {
-                        document.getElementById('addressValue').textContent = 'Address not available';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error getting address:', error);
-                    document.getElementById('addressValue').textContent = 'Address not available';
-                });
-        }
-        
-        function startTracking() {
-            if (isTracking) {
-                showAlert('Already tracking', 'warning');
-                return;
-            }
-            
-            const userId = getUserId();
-            if (!userId) {
-                showAlert('User ID is required', 'error');
-                return;
-            }
-
-            // Update URL with current user ID
-            updateUrlWithUserId(userId);
-            
-            isTracking = true;
-            trackingInterval = setInterval(fetchLocation, TRACKING_INTERVAL);
-            
-            document.getElementById('trackingStatus').textContent = 'Tracking Active';
-            document.getElementById('statusDot').className = 'status-dot status-tracking pulse';
-            updateConnectionStatus('Tracking', 'success');
-            showAlert('Tracking started', 'success');
-            
-            // Fetch first location immediately
-            fetchLocation();
-        }
-        
-        function stopTracking() {
-            if (!isTracking) {
-                showAlert('Not tracking', 'warning');
-                return;
-            }
-            
-            isTracking = false;
-            clearInterval(trackingInterval);
-            
-            document.getElementById('trackingStatus').textContent = 'Tracking Stopped';
-            document.getElementById('statusDot').className = 'status-dot status-disconnected';
-            updateConnectionStatus('Stopped', 'error');
-            showAlert('Tracking stopped', 'error');
-        }
-        
-        function refreshLocation() {
-            const userId = getUserId();
-            updateUrlWithUserId(userId);
-            fetchLocation();
-        }
-        
-        function shareLocation() {
-            const currentUrl = window.location.href;
-            
-            // Check if Web Share API is supported
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Women Safety Tracker',
-                    text: 'Track user location in real-time',
-                    url: currentUrl
-                })
-                .then(() => console.log('Shared successfully'))
-                .catch((error) => console.log('Error sharing:', error));
-            } else {
-                // Fallback: copy to clipboard
-                navigator.clipboard.writeText(currentUrl)
-                    .then(() => {
-                        showAlert('Link copied to clipboard!', 'success');
-                    })
-                    .catch(err => {
-                        console.error('Failed to copy: ', err);
-                        showAlert('Failed to copy link', 'error');
-                    });
-            }
-        }
-        
-        function updateConnectionStatus(message, type) {
-            const statusElement = document.getElementById('connectionStatus');
-            const dotElement = document.getElementById('connectionDot');
-            
-            statusElement.textContent = message;
-            
-            dotElement.className = 'status-dot ' + (
-                type === 'success' ? 'status-connected pulse' :
-                type === 'warning' ? 'status-tracking pulse' :
-                'status-disconnected'
-            );
-        }
-        
-        function showAlert(message, type) {
-            const now = Date.now();
-            if (now - lastAlertTime < ALERT_COOLDOWN) {
-                return; // Skip if too soon
-            }
-            lastAlertTime = now;
-            
-            const alertContainer = document.getElementById('alertContainer');
-            const alert = document.createElement('div');
-            alert.className = `alert alert-${type}`;
-            
-            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠️';
-            alert.innerHTML = `${icon} ${message}`;
-            
-            alertContainer.appendChild(alert);
-            
-            // Remove alert after 3 seconds
-            setTimeout(() => {
-                if (alert.parentNode) {
-                    alert.style.animation = 'slideIn 0.3s ease reverse';
-                    setTimeout(() => alert.remove(), 300);
-                }
-            }, 3000);
+        if(apiTimestamp){
+          const parsed = new Date(apiTimestamp);
+          if(!isNaN(parsed.getTime())) setText('lastUpdated', parsed.toLocaleString());
+          else setText('lastUpdated', apiTimestamp);
+        } else {
+          setText('lastUpdated', new Date().toLocaleString());
         }
 
-        // Initialize the map when the page loads
-        document.addEventListener('DOMContentLoaded', initMap);
-    </script>
+        setText('bottomDevice', data.device ?? UNAVAIL);
+
+        const dirBtn = document.getElementById('dirBtn');
+
+        setAttrDisabled(dirBtn, false);
+        dirBtn.onclick = openDirections;
+
+      } catch(err){
+        console.error('Fetch error', err);
+        applyUnavailableUI();
+      }
+    }
+
+    /**************** APPLY UNAVAILABLE UI *****************/
+    function applyUnavailableUI(data){
+      const uid = getUserId();
+      setText('deviceId', data && data.userId ? data.userId : (uid || UNAVAIL));
+      setText('bottomUser', data && data.userId ? data.userId : (uid || UNAVAIL));
+      
+      // 3. Failure / Unavailable -> Set Status to Offline
+      setStatusText('<span style="color:#ea4335">Offline</span>');
+
+      // *** MODIFIED LOGIC: Button becomes "Unavailable" when Status is Offline ***
+      const websiteBtn = document.getElementById('websiteBtn');
+      websiteBtn.textContent = '🌐 Unavailable';
+      websiteBtn.classList.add('disabled');
+      websiteBtn.style.backgroundColor = '#444'; // Revert to grey
+      websiteBtn.style.borderColor = 'rgba(0,0,0,0.08)';
+      websiteBtn.onclick = null;
+      // ***************************************************************************
+
+      // Updated unavailable battery check
+      const batt = data ? (data.batteryPercentage ?? data.battery) : null;
+      setText('batteryInfo', batt !== null ? `${batt}%` : UNAVAIL);
+
+      setText('latVal', UNAVAIL);
+      setText('lngVal', UNAVAIL);
+      setText('accVal', UNAVAIL);
+      setText('addrVal', UNAVAIL);
+      setText('lastUpdated', UNAVAIL);
+      setText('bottomDevice', data && data.device ? data.device : UNAVAIL);
+
+      setAttrDisabled(document.getElementById('dirBtn'), true);
+    }
+
+    /**************** BUTTONS *****************/
+    function refreshNow(){
+      fetchAndApply();
+    }
+
+    function openDirections(){
+      if(!currentLat || !currentLng){
+        alert('Coordinates not available');
+        return;
+      }
+      // Fixed the directions URL to standard Google Maps format
+      const url = `https://www.google.com/maps/dir/?api=1&destination=${currentLat},${currentLng}&travelmode=driving`;
+      window.open(url, '_blank');
+    }
+
+    function openWebsite(){
+      const websiteBtn = document.getElementById('websiteBtn');
+      if(websiteBtn.classList.contains('disabled')){
+        alert('Website unavailable');
+      }
+    }
+
+    /**************** SETTINGS UI *****************/
+    function toggleAutoScroll(){
+      isAutoScroll = !isAutoScroll;
+      const el = document.getElementById('autoScrollToggle');
+      if(isAutoScroll) el.classList.add('on'); else el.classList.remove('on');
+      
+      if(isAutoScroll && currentLat && currentLng){
+        map.setView([currentLat, currentLng], 15, {animate:true});
+      }
+    }
+
+    function toggleHistory(){
+      showHistory = !showHistory;
+      const el = document.getElementById('historyToggle');
+      if(showHistory) el.classList.add('on'); else el.classList.remove('on');
+      if(showHistory) alert('Device Path History: ON (placeholder)');
+    }
+
+    function changeAutoRefresh(){
+      const val = Number(document.getElementById('autoRefreshSelect').value);
+      autoRefreshIntervalMs = val;
+      if(autoRefreshTimer) { clearInterval(autoRefreshTimer); autoRefreshTimer = null; }
+      if(autoRefreshIntervalMs > 0){
+        autoRefreshTimer = setInterval(()=>{ fetchAndApply(); }, autoRefreshIntervalMs);
+      }
+    }
+
+    // expose functions
+    window.refreshNow = refreshNow;
+    window.openDirections = openDirections;
+    window.openWebsite = openWebsite;
+    window.shareUrl = shareUrl;
+    window.logout = logout;
+    window.showUserInfo = showUserInfo;
+  </script>
 </body>
 </html>
