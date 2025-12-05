@@ -18,6 +18,8 @@
       --text-main: #f9fafb;
       --text-muted: rgba(249,250,251,0.6);
       --accent: #3a6df0;
+      --accent-light: #5a8bf2;
+      --accent-glow: rgba(58, 111, 240, 0.3);
       --success: #22c55e;
       --danger: #ef4444;
       --warning: #f59e0b;
@@ -92,10 +94,13 @@
       position: relative;
       z-index: 1;
       transition: var(--transition);
+      margin: 0 auto;
+      transform: translateX(0);
     }
 
     .glass-card.with-logs {
-      transform: translateX(-150px);
+      width: 1400px;
+      transform: translateX(0);
     }
 
     .glass-card.blurred-bg {
@@ -191,6 +196,11 @@
       gap: 16px;
       padding: 0 28px 20px;
       align-items: start;
+      transition: grid-template-columns 0.35s ease;
+    }
+
+    .glass-card.with-logs .dash-main {
+      grid-template-columns: 300px 1fr 400px;
     }
 
     /* Left Column - Cards */
@@ -220,7 +230,7 @@
       align-items: center;
       gap: 10px;
       margin-bottom: 16px;
-      padding-bottom: 12px;
+      padding-bottom: 10px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
 
@@ -242,15 +252,15 @@
     .device-info {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .device-line {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 4px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      padding: 3px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
     }
 
     .device-line:last-child {
@@ -307,7 +317,7 @@
     .loc-grid {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
       font-size: 14px;
     }
 
@@ -315,8 +325,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 4px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      padding: 3px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
     }
 
     .loc-row:last-child {
@@ -336,17 +346,17 @@
     }
 
     .address-box {
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
       font-size: 13px;
-      line-height: 1.4;
+      line-height: 1.3;
       color: var(--text-main);
     }
 
     .address-box .loc-label {
       display: block;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     /* Settings Card */
@@ -354,8 +364,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
     }
 
     .setting-row:last-child {
@@ -410,23 +420,52 @@
       transform: translateX(18px);
     }
 
-    /* Auto Refresh Select */
+    /* Custom Select Dropdown */
     .auto-refresh-select {
-      padding: 8px 12px;
+      position: relative;
+      padding: 8px 32px 8px 12px;
       border-radius: var(--radius);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.05);
+      background: #2e3134;
       color: var(--text-main);
       font-size: 13px;
       font-weight: 500;
       cursor: pointer;
       transition: var(--transition-fast);
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f9fafb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 16px;
+      min-width: 120px;
     }
 
     .auto-refresh-select:focus {
       outline: none;
       border-color: var(--accent);
-      background: rgba(255, 255, 255, 0.08);
+      background-color: #323639;
+      box-shadow: 0 0 0 2px rgba(58, 111, 240, 0.1);
+    }
+
+    /* Custom dropdown options styling */
+    .auto-refresh-select option {
+      background: #2e3134;
+      color: var(--text-main);
+      padding: 10px;
+      font-size: 13px;
+      border: none;
+    }
+
+    .auto-refresh-select option:hover {
+      background: #3a6df0;
+      color: white;
+    }
+
+    .auto-refresh-select option:checked {
+      background: var(--accent);
+      color: white;
     }
 
     /* Map Area */
@@ -435,6 +474,8 @@
       flex-direction: column;
       gap: 16px;
       position: relative;
+      width: 100%;
+      transition: width 0.35s ease;
     }
 
     .map-frame{
@@ -445,10 +486,11 @@
       padding: 20px;
       border: 1px solid var(--card-border);
       position: relative;
+      width: 100%;
     }
 
     #map{
-      height: 368px;
+      height: 320px;
       border-radius: var(--radius);
       transition: height 0.3s ease;
       background: #1a1d28;
@@ -554,7 +596,7 @@
       pointer-events: none;
     }
 
-    /* Media Panel (Formerly Placeholder) */
+    /* Media Panel */
     .media-panel {
       background: rgba(255, 255, 255, 0.03);
       backdrop-filter: blur(10px);
@@ -563,7 +605,6 @@
       border: 1px solid var(--card-border);
       padding: 20px;
     }
-
 
     .media-grid {
       display: grid;
@@ -763,71 +804,47 @@
       color: var(--text-muted);
     }
 
-    /* Bottom Row */
-    .bottom-row{
-      padding: 16px 28px;
-      display: flex;
-      gap: 32px;
-      align-items: center;
-      justify-content: space-between;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      color: var(--text-muted);
-      font-size: 12px;
-      background: rgba(0, 0, 0, 0.2);
-    }
-
-    .bottom-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .bottom-item strong {
-      color: var(--text-main);
-      font-weight: 600;
-    }
-
-    /* LOGS PANEL - Slide from Right */
-    .logs-panel-container {
-      position: fixed;
-      top: 0;
-      right: -400px;
-      width: 400px;
-      height: 100vh;
-      background: var(--bg-main);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-left: 1px solid var(--card-border);
-      box-shadow: -4px 0 20px rgba(0,0,0,0.4);
-      z-index: 100;
-      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
+    /* Logs Panel - Integrated inside main card */
+    .logs-column {
+      display: none;
       flex-direction: column;
+      gap: 16px;
+      opacity: 0;
+      transform: translateX(20px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
     }
 
-    .logs-panel-container.open {
-      transform: translateX(-400px);
+    .glass-card.with-logs .logs-column {
+      display: flex;
+      opacity: 1;
+      transform: translateX(0);
     }
 
     .logs-panel {
-      flex: 1;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--card-border);
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      height: 100%;
     }
 
     .logs-header {
-      padding: 24px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     .logs-header h3 {
       margin: 0;
-      font-size: 18px;
-      font-weight: 700;
+      font-size: 15px;
+      font-weight: 600;
       color: var(--text-main);
     }
 
@@ -847,34 +864,35 @@
     }
 
     .logs-close-btn i {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
     }
 
     /* Logs Tabs */
     .logs-tabs {
       display: flex;
-      padding: 0 24px;
-      gap: 4px;
       margin-bottom: 16px;
+      gap: 4px;
     }
 
     .logs-tab {
       flex: 1;
-      padding: 12px 0;
+      padding: 10px 0;
       border: none;
       background: transparent;
       color: var(--text-muted);
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       cursor: pointer;
       text-align: center;
       position: relative;
       transition: var(--transition-fast);
+      border-radius: var(--radius);
     }
 
     .logs-tab:hover {
       color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
     }
 
     .logs-tab.active {
@@ -897,50 +915,111 @@
     .logs-content {
       flex: 1;
       overflow-y: auto;
-      padding: 0 24px 24px;
+      position: relative;
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
     }
 
-    .log-item {
-      padding: 16px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+    /* Custom scrollbar for logs */
+    .logs-content::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .logs-content::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 3px;
+    }
+
+    .logs-content::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 3px;
       transition: var(--transition-fast);
     }
 
-    .log-item:last-child {
-      border-bottom: none;
+    .logs-content::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .logs-list {
+      padding: 16px;
+      min-height: 100%;
+    }
+
+    .log-item {
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 8px;
+      transition: var(--transition-fast);
     }
 
     .log-item:hover {
-      background: rgba(255,255,255,0.05);
-      margin: 0 -24px;
-      padding: 16px 24px;
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .log-item:last-child {
+      margin-bottom: 0;
     }
 
     .log-time {
       color: var(--text-main);
       font-weight: 600;
-      margin-bottom: 4px;
-      font-size: 14px;
+      margin-bottom: 6px;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .log-coords {
       color: var(--text-muted);
       font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
-      font-size: 13px;
-      margin-bottom: 2px;
+      font-size: 12px;
+      margin-bottom: 4px;
+      line-height: 1.4;
     }
 
     .log-meta {
       color: var(--text-muted);
-      font-size: 12px;
+      font-size: 11px;
       font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+      opacity: 0.8;
     }
 
     .no-logs {
       text-align: center;
       color: var(--text-muted);
-      padding: 60px 20px;
-      font-size: 14px;
+      padding: 40px 20px;
+      font-size: 13px;
+    }
+
+    /* New Log Indicator */
+    .new-log-indicator {
+      position: sticky;
+      bottom: 16px;
+      left: 0;
+      right: 0;
+      margin: 8px 16px;
+      padding: 8px 16px;
+      background: rgba(58, 111, 240, 0.2);
+      border: 1px solid rgba(58, 111, 240, 0.3);
+      color: var(--text-main);
+      border-radius: var(--radius);
+      text-align: center;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      z-index: 10;
+      backdrop-filter: blur(10px);
+    }
+
+    .new-log-indicator:hover {
+      background: rgba(58, 111, 240, 0.3);
+      border-color: rgba(58, 111, 240, 0.4);
     }
 
     /* Pagination */
@@ -948,9 +1027,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 24px;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      margin-top: auto;
+      padding-top: 16px;
+      margin-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.06);
     }
 
     .pagination-btn {
@@ -980,6 +1059,131 @@
       color: var(--text-muted);
     }
 
+    /* Bottom Row */
+    .bottom-row{
+      padding: 16px 28px;
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      color: var(--text-muted);
+      font-size: 12px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .bottom-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .bottom-item strong {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    /* Custom Modern Map Marker - Added */
+    .modern-marker {
+      position: relative;
+      width: 36px;
+      height: 48px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+    }
+
+    .modern-marker .pin-body {
+      position: absolute;
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      top: 6px;
+      left: 0;
+      box-shadow: 
+        inset 0 0 0 2px rgba(255, 255, 255, 0.8),
+        0 0 0 3px rgba(58, 111, 240, 0.2),
+        0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .modern-marker .pin-body::before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+    }
+
+    .modern-marker .pin-body::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 4px var(--accent);
+    }
+
+    .modern-marker .pin-pulse {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      background: var(--accent);
+      border-radius: 50%;
+      top: 0;
+      left: -6px;
+      opacity: 0.15;
+      animation: pulse 2s infinite;
+    }
+
+    .modern-marker .pin-stem {
+      position: absolute;
+      width: 4px;
+      height: 12px;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%);
+      border-radius: 2px;
+      bottom: 0;
+      left: 16px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.8);
+        opacity: 0.15;
+      }
+      50% {
+        transform: scale(1);
+        opacity: 0.1;
+      }
+      100% {
+        transform: scale(0.8);
+        opacity: 0.15;
+      }
+    }
+
+    .modern-marker:hover {
+      transform: translateY(-4px);
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
+    }
+
+    .modern-marker:hover .pin-body {
+      box-shadow: 
+        inset 0 0 0 2px rgba(255, 255, 255, 0.9),
+        0 0 0 4px rgba(58, 111, 240, 0.3),
+        0 6px 16px rgba(0, 0, 0, 0.4);
+    }
+
     /* FULLSCREEN MAP */
     .glass-card.fullscreen-map {
       position: fixed !important;
@@ -1005,7 +1209,7 @@
     .fullscreen-map .left-col,
     .fullscreen-map .bottom-row,
     .fullscreen-map .media-panel,
-    .fullscreen-map .logs-panel-container {
+    .fullscreen-map .logs-column {
       display: none !important;
     }
 
@@ -1079,19 +1283,6 @@
 
     .fullscreen-map .exit-fullscreen-btn {
       display: flex;
-    }
-
-    /* Custom Map Pin */
-    .custom-marker {
-      background: none;
-      border: none;
-    }
-
-    .custom-marker i {
-      width: 32px;
-      height: 32px;
-      color: var(--danger);
-      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
     }
 
     /* Login Modal - Dark Glass Theme */
@@ -1237,11 +1428,21 @@
       .glass-card{ 
         width: 96%; 
         max-width: 1100px; 
-        margin: 20px;
+        margin: 20px auto;
+      }
+      
+      .glass-card.with-logs {
+        width: 96%;
+        max-width: 1400px;
+        margin: 20px auto;
       }
       
       .dash-main{ 
         grid-template-columns: 1fr; 
+      }
+      
+      .glass-card.with-logs .dash-main {
+        grid-template-columns: 1fr;
       }
       
       .left-col{ 
@@ -1252,17 +1453,8 @@
         order: 1; 
       }
       
-      .logs-panel-container {
-        width: 100%;
-        right: -100%;
-      }
-      
-      .logs-panel-container.open {
-        transform: translateX(-100%);
-      }
-      
-      .glass-card.with-logs {
-        transform: translateX(-50%);
+      .logs-column {
+        order: 3;
       }
     }
 
@@ -1395,7 +1587,7 @@
                 <i data-lucide="navigation"></i>
                 <span>Auto Scroll</span>
               </div>
-              <div id="autoScrollToggle" class="toggle" onclick="toggleAutoScroll()">
+              <div id="autoScrollToggle" class="toggle on" onclick="toggleAutoScroll()">
                 <div class="dot"></div>
               </div>
             </div>
@@ -1449,9 +1641,8 @@
           </div>
         </div>
 
-        <!-- Media Panel (Formerly Placeholder) -->
+        <!-- Media Panel -->
         <div class="media-panel">
-          
           <div class="media-grid">
             <!-- Audio Recordings Card -->
             <div class="media-card">
@@ -1495,6 +1686,43 @@
           </div>
         </div>
       </div>
+
+      <!-- Logs Column (Hidden by default) -->
+      <div class="logs-column">
+        <div class="logs-panel">
+          <div class="logs-header">
+            <h3>Location History</h3>
+            <button class="logs-close-btn" onclick="closeLogsPanel()">
+              <i data-lucide="x"></i>
+            </button>
+          </div>
+
+          <div class="logs-tabs">
+            <button class="logs-tab active" onclick="switchLogsMode('realtime')">
+              Realtime Logs
+            </button>
+            <button class="logs-tab" onclick="switchLogsMode('full')">
+              Full Log List
+            </button>
+          </div>
+
+          <div class="logs-content">
+            <div class="logs-list" id="logsList">
+              <div class="no-logs">Loading logs...</div>
+            </div>
+          </div>
+
+          <div class="logs-pagination" id="logsPagination" style="display: none;">
+            <button class="pagination-btn" id="prevBtn" onclick="changeLogsPage(-1)">
+              Previous
+            </button>
+            <div class="pagination-info" id="pageInfo">Page 1 of 1</div>
+            <button class="pagination-btn" id="nextBtn" onclick="changeLogsPage(1)">
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Bottom Row -->
@@ -1507,41 +1735,6 @@
       </div>
       <div class="bottom-item">
         <strong>Version:</strong> v2.1 Dark
-      </div>
-    </div>
-  </div>
-
-  <!-- RIGHT SIDE LOGS PANEL -->
-  <div class="logs-panel-container" id="logsPanel">
-    <div class="logs-panel">
-      <div class="logs-header">
-        <h3>Location History</h3>
-        <button class="logs-close-btn" onclick="closeLogsPanel()">
-          <i data-lucide="x"></i>
-        </button>
-      </div>
-
-      <div class="logs-tabs">
-        <button class="logs-tab active" data-mode="realtime" onclick="switchLogsMode('realtime')">
-          Realtime
-        </button>
-        <button class="logs-tab" data-mode="full" onclick="switchLogsMode('full')">
-          Full List
-        </button>
-      </div>
-
-      <div class="logs-content" id="logsContent">
-        <div class="no-logs">Loading logs...</div>
-      </div>
-
-      <div class="logs-pagination" id="logsPagination" style="display: none;">
-        <button class="pagination-btn" id="prevBtn" onclick="changeLogsPage(-1)">
-          Previous
-        </button>
-        <div class="pagination-info" id="pageInfo">Page 1 of 1</div>
-        <button class="pagination-btn" id="nextBtn" onclick="changeLogsPage(1)">
-          Next
-        </button>
       </div>
     </div>
   </div>
@@ -1672,9 +1865,8 @@
     /**************** STATE *****************/
     let map, marker, accuracyCircle;
     let currentLat=null, currentLng=null;
-    let isAutoScroll = false;
+    let isAutoScroll = true; // Default ON
     let isUserPanning = false;
-    let autoScrollTimeout = null;
     
     // Logs state
     let currentLogsPage = 1;
@@ -1682,6 +1874,9 @@
     let currentLogsMode = 'realtime';
     let realtimeLogsInterval = null;
     let realtimeLogsList = [];
+    let lastRealtimeLogKey = null; // Track the last log to detect new ones
+    let userScrolledUp = false;
+    let newLogsAvailable = false;
 
     // Media state
     let currentAudioPage = 1;
@@ -1768,15 +1963,22 @@
         attribution: '© OpenStreetMap contributors'
       }).addTo(map);
 
-      // Create custom marker with Lucide icon
-      const customIcon = L.divIcon({
-        className: 'custom-marker',
-        html: '<i data-lucide="map-pin"></i>',
-        iconSize: [32, 32],
-        iconAnchor: [16, 32]
+      // Create custom modern marker
+      const ModernMarkerIcon = L.divIcon({
+        className: 'modern-marker',
+        html: `
+          <div class="modern-marker">
+            <div class="pin-pulse"></div>
+            <div class="pin-body"></div>
+            <div class="pin-stem"></div>
+          </div>
+        `,
+        iconSize: [36, 48],
+        iconAnchor: [18, 48],
+        popupAnchor: [0, -48]
       });
 
-      marker = L.marker([20.5937,78.9629], { icon: customIcon }).addTo(map);
+      marker = L.marker([20.5937,78.9629], { icon: ModernMarkerIcon }).addTo(map);
       accuracyCircle = L.circle([20.5937,78.9629], {
         radius: 0, 
         color: '#3a6df0', 
@@ -1784,87 +1986,67 @@
         fillOpacity: 0.15
       }).addTo(map);
 
-      // Initialize icons in the marker
-      lucide.createIcons();
-
-      // Setup map events for auto-scroll behavior (2 seconds)
-      map.on('movestart', function() {
-        if (isAutoScroll) {
-          isUserPanning = true;
-          if (autoScrollTimeout) {
-            clearTimeout(autoScrollTimeout);
-            autoScrollTimeout = null;
-          }
-        }
-      });
-
-      map.on('moveend', function() {
-        if (isAutoScroll && isUserPanning && currentLat && currentLng) {
-          autoScrollTimeout = setTimeout(function() {
-            if (isUserPanning) {
-              map.flyTo([currentLat, currentLng], map.getZoom(), { 
-                duration: 1.1,
-                easeLinearity: 0.25
-              });
-              isUserPanning = false;
-            }
-          }, 2000); // 2 seconds
-        }
-      });
-
+      // Setup map events for auto-scroll behavior
       map.on('dragstart', function() {
         if (isAutoScroll) {
           isUserPanning = true;
-          if (autoScrollTimeout) {
-            clearTimeout(autoScrollTimeout);
-            autoScrollTimeout = null;
-          }
         }
       });
 
       map.on('dragend', function() {
         if (isAutoScroll && isUserPanning && currentLat && currentLng) {
-          autoScrollTimeout = setTimeout(function() {
-            if (isUserPanning) {
-              map.flyTo([currentLat, currentLng], map.getZoom(), { 
-                duration: 1.1,
-                easeLinearity: 0.25
-              });
-              isUserPanning = false;
-            }
-          }, 2000); // 2 seconds
+          // Auto-center to live location immediately after drag ends
+          map.flyTo([currentLat, currentLng], map.getZoom(), { 
+            duration: 0.8,
+            easeLinearity: 0.3
+          });
+          isUserPanning = false;
+        }
+      });
+
+      // Also handle moveend for other types of movement
+      map.on('moveend', function() {
+        // If user panned with keyboard or other controls and auto-scroll is ON, snap back
+        if (isAutoScroll && isUserPanning && currentLat && currentLng) {
+          map.flyTo([currentLat, currentLng], map.getZoom(), { 
+            duration: 0.8,
+            easeLinearity: 0.3
+          });
+          isUserPanning = false;
         }
       });
     }
 
     /**************** LOGS PANEL FUNCTIONS *****************/
     function openLogsPanel() {
-      const panel = document.getElementById('logsPanel');
       const dashboard = document.getElementById('dashboard');
-      
-      panel.classList.add('open');
       dashboard.classList.add('with-logs');
       
-      // Load logs if not already loaded
-      if (realtimeLogsList.length === 0) {
-        fetchLogs();
-      }
+      // Load logs
+      fetchLogs();
       
       // Start realtime polling if in realtime mode
       if (currentLogsMode === 'realtime') {
         startRealtimePolling();
       }
+      
+      // Setup scroll listener for new log indicator
+      const logsContent = document.querySelector('.logs-content');
+      logsContent.addEventListener('scroll', handleLogsScroll);
     }
 
     function closeLogsPanel() {
-      const panel = document.getElementById('logsPanel');
       const dashboard = document.getElementById('dashboard');
-      
-      panel.classList.remove('open');
       dashboard.classList.remove('with-logs');
       
       // Stop realtime polling
       stopRealtimePolling();
+      
+      // Remove scroll listener
+      const logsContent = document.querySelector('.logs-content');
+      if (logsContent) {
+        logsContent.removeEventListener('scroll', handleLogsScroll);
+      }
     }
 
     function switchLogsMode(mode) {
@@ -1873,7 +2055,7 @@
       
       // Update active tab
       document.querySelectorAll('.logs-tab').forEach(tab => {
-        tab.classList.toggle('active', tab.dataset.mode === mode);
+        tab.classList.toggle('active', tab.textContent.includes(mode === 'realtime' ? 'Realtime Logs' : 'Full Log List'));
       });
       
       // Show/hide pagination
@@ -1881,6 +2063,11 @@
       
       if (mode === 'realtime') {
         startRealtimePolling();
+        // Clear and fetch fresh logs for tail mode
+        realtimeLogsList = [];
+        lastRealtimeLogKey = null;
+        userScrolledUp = false;
+        newLogsAvailable = false;
       } else {
         stopRealtimePolling();
       }
@@ -1890,7 +2077,9 @@
 
     function startRealtimePolling() {
       stopRealtimePolling();
-      realtimeLogsInterval = setInterval(fetchLogs, 10000); // 10 seconds
+      realtimeLogsInterval = setInterval(() => {
+        fetchLatestLog();
+      }, 5000); // Poll every 5 seconds for realtime logs
     }
 
     function stopRealtimePolling() {
@@ -1900,23 +2089,63 @@
       }
     }
 
-    async function fetchLogs() {
+    function handleLogsScroll() {
+      const logsContent = document.querySelector('.logs-content');
+      const scrollTop = logsContent.scrollTop;
+      const scrollHeight = logsContent.scrollHeight;
+      const clientHeight = logsContent.clientHeight;
+      
+      // If user is within 100px of the bottom, consider them "at the bottom"
+      const isNearBottom = (scrollHeight - scrollTop - clientHeight) < 100;
+      
+      if (isNearBottom) {
+        userScrolledUp = false;
+        // Hide new log indicator if user scrolls back to bottom
+        hideNewLogIndicator();
+      } else {
+        userScrolledUp = true;
+      }
+    }
+
+    function showNewLogIndicator() {
+      let indicator = document.querySelector('.new-log-indicator');
+      if (!indicator) {
+        indicator = document.createElement('div');
+        indicator.className = 'new-log-indicator';
+        indicator.innerHTML = '<i data-lucide="arrow-down"></i> New log available';
+        indicator.onclick = scrollToBottom;
+        document.querySelector('.logs-content').appendChild(indicator);
+        lucide.createIcons();
+      }
+      indicator.style.display = 'block';
+      newLogsAvailable = true;
+    }
+
+    function hideNewLogIndicator() {
+      const indicator = document.querySelector('.new-log-indicator');
+      if (indicator) {
+        indicator.style.display = 'none';
+        newLogsAvailable = false;
+      }
+    }
+
+    function scrollToBottom() {
+      const logsContent = document.querySelector('.logs-content');
+      logsContent.scrollTo({
+        top: logsContent.scrollHeight,
+        behavior: 'smooth'
+      });
+      hideNewLogIndicator();
+      userScrolledUp = false;
+    }
+
+    async function fetchLatestLog() {
       const uid = getUserId();
       if (!uid) return;
 
-      const logsContent = document.getElementById('logsContent');
-      
       try {
-        let url;
-        if (currentLogsMode === 'realtime') {
-          // Fetch only the latest log for realtime mode
-          url = `${HISTORY_API_URL}?userId=${encodeURIComponent(uid)}&page=1&pageSize=1`;
-        } else {
-          // Fetch paginated logs for full list mode
-          url = `${HISTORY_API_URL}?userId=${encodeURIComponent(uid)}&page=${currentLogsPage}&pageSize=20`;
-        }
-
-        const response = await fetch(url);
+        // Fetch only the latest log
+        const response = await fetch(`${HISTORY_API_URL}?userId=${encodeURIComponent(uid)}&page=1&pageSize=1`);
         const data = await response.json();
 
         let payload;
@@ -1928,22 +2157,134 @@
           }
         } else payload = data;
 
-        if (payload.success === false || !payload.logs) {
-          logsContent.innerHTML = '<div class="no-logs">No logs available</div>';
+        if (payload.success === false || !payload.logs || payload.logs.length === 0) {
           return;
         }
 
-        const logs = payload.logs || [];
-        totalLogsPages = payload.totalPages || 1;
+        const latestLog = payload.logs[0];
+        const logKey = `${latestLog.loggedAt}_${latestLog.lat}_${latestLog.lng}`;
+        
+        // Check if this is a new log
+        if (logKey !== lastRealtimeLogKey) {
+          lastRealtimeLogKey = logKey;
+          realtimeLogsList.unshift(latestLog);
+          
+          // Keep only last 50 logs in memory
+          if (realtimeLogsList.length > 50) {
+            realtimeLogsList.pop();
+          }
+          
+          // Update UI
+          renderRealtimeLogs();
+          
+          // Handle scroll behavior
+          if (userScrolledUp) {
+            showNewLogIndicator();
+          } else {
+            // Auto-scroll to bottom
+            setTimeout(scrollToBottom, 100);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching latest log:', error);
+      }
+    }
 
-        if (currentLogsMode === 'full') {
+    function renderRealtimeLogs() {
+      const logsList = document.getElementById('logsList');
+      
+      if (realtimeLogsList.length === 0) {
+        logsList.innerHTML = '<div class="no-logs">Waiting for logs...</div>';
+        return;
+      }
+
+      let logsHTML = '';
+      // Show logs in chronological order (oldest to newest)
+      [...realtimeLogsList].reverse().forEach(log => {
+        const time = log.timestamp || new Date(log.loggedAt).toLocaleTimeString();
+        const loggedAt = log.loggedAt ? new Date(log.loggedAt).toLocaleString() : 'Unknown';
+        const lat = log.lat ? parseFloat(log.lat).toFixed(6) : '–';
+        const lng = log.lng ? parseFloat(log.lng).toFixed(6) : '–';
+        
+        logsHTML += `
+          <div class="log-item">
+            <div class="log-time">
+              <span>${time}</span>
+              <i data-lucide="circle" style="width: 8px; height: 8px; color: var(--accent);"></i>
+            </div>
+            <div class="log-coords">Lat: ${lat}, Lng: ${lng}</div>
+            <div class="log-meta">${loggedAt}</div>
+          </div>
+        `;
+      });
+      
+      logsList.innerHTML = logsHTML;
+      lucide.createIcons();
+    }
+
+    async function fetchLogs() {
+      const uid = getUserId();
+      if (!uid) return;
+
+      const logsList = document.getElementById('logsList');
+      
+      try {
+        if (currentLogsMode === 'realtime') {
+          // For realtime mode, fetch initial latest log
+          const response = await fetch(`${HISTORY_API_URL}?userId=${encodeURIComponent(uid)}&page=1&pageSize=1`);
+          const data = await response.json();
+
+          let payload;
+          if (data && typeof data === "object" && data.body) {
+            try {
+              payload = typeof data.body === "string" ? JSON.parse(data.body) : data.body;
+            } catch (e) {
+              payload = data.body;
+            }
+          } else payload = data;
+
+          if (payload.success === false || !payload.logs || payload.logs.length === 0) {
+            logsList.innerHTML = '<div class="no-logs">No logs yet for this user</div>';
+            return;
+          }
+
+          const latestLog = payload.logs[0];
+          lastRealtimeLogKey = `${latestLog.loggedAt}_${latestLog.lat}_${latestLog.lng}`;
+          realtimeLogsList = [latestLog];
+          
+          renderRealtimeLogs();
+          // Scroll to bottom initially
+          setTimeout(scrollToBottom, 100);
+          
+        } else {
           // Full list mode with pagination
+          const response = await fetch(`${HISTORY_API_URL}?userId=${encodeURIComponent(uid)}&page=${currentLogsPage}&pageSize=20`);
+          const data = await response.json();
+
+          let payload;
+          if (data && typeof data === "object" && data.body) {
+            try {
+              payload = typeof data.body === "string" ? JSON.parse(data.body) : data.body;
+            } catch (e) {
+              payload = data.body;
+            }
+          } else payload = data;
+
+          if (payload.success === false || !payload.logs) {
+            logsList.innerHTML = '<div class="no-logs">No logs available</div>';
+            return;
+          }
+
+          const logs = payload.logs || [];
+          totalLogsPages = payload.totalPages || 1;
+
+          // Update pagination
           document.getElementById("pageInfo").textContent = `Page ${currentLogsPage} of ${totalLogsPages}`;
           document.getElementById("prevBtn").disabled = currentLogsPage <= 1;
           document.getElementById("nextBtn").disabled = currentLogsPage >= totalLogsPages || logs.length === 0;
 
           if (logs.length === 0) {
-            logsContent.innerHTML = '<div class="no-logs">No logs on this page</div>';
+            logsList.innerHTML = '<div class="no-logs">No logs on this page</div>';
             return;
           }
 
@@ -1959,59 +2300,15 @@
                 <div class="log-time">${time}</div>
                 <div class="log-coords">Lat: ${lat}, Lng: ${lng}</div>
                 <div class="log-meta">${loggedAt}</div>
-              </div>
+            </div>
             `;
           });
           
-          logsContent.innerHTML = logsHTML;
-          
-        } else {
-          // Realtime mode - show only latest
-          if (logs.length === 0) {
-            if (realtimeLogsList.length === 0) {
-              logsContent.innerHTML = '<div class="no-logs">No logs yet for this user</div>';
-            }
-            return;
-          }
-
-          const latestLog = logs[0];
-          const time = latestLog.timestamp || new Date().toLocaleTimeString();
-          const loggedAt = latestLog.loggedAt ? new Date(latestLog.loggedAt).toLocaleString() : 'Unknown';
-          const lat = latestLog.lat ? parseFloat(latestLog.lat).toFixed(6) : '–';
-          const lng = latestLog.lng ? parseFloat(latestLog.lng).toFixed(6) : '–';
-          
-          // Check if this is a new log
-          if (realtimeLogsList.length === 0 || 
-              realtimeLogsList[0].loggedAt !== latestLog.loggedAt) {
-            
-            realtimeLogsList.unshift(latestLog);
-            if (realtimeLogsList.length > 5) {
-              realtimeLogsList.pop();
-            }
-            
-            // Update UI with animation
-            let logsHTML = '';
-            realtimeLogsList.forEach(log => {
-              const logTime = log.timestamp || new Date(log.loggedAt).toLocaleTimeString();
-              const logLat = log.lat ? parseFloat(log.lat).toFixed(6) : '–';
-              const logLng = log.lng ? parseFloat(log.lng).toFixed(6) : '–';
-              const logLoggedAt = log.loggedAt ? new Date(log.loggedAt).toLocaleString() : 'Unknown';
-              
-              logsHTML += `
-                <div class="log-item">
-                  <div class="log-time">${logTime}</div>
-                  <div class="log-coords">Lat: ${logLat}, Lng: ${logLng}</div>
-                  <div class="log-meta">${logLoggedAt}</div>
-                </div>
-              `;
-            });
-            
-            logsContent.innerHTML = logsHTML;
-          }
+          logsList.innerHTML = logsHTML;
         }
       } catch (error) {
         console.error('Error fetching logs:', error);
-        document.getElementById('logsContent').innerHTML = '<div class="no-logs">Error loading logs</div>';
+        document.getElementById('logsList').innerHTML = '<div class="no-logs">Error loading logs</div>';
       }
     }
 
@@ -2029,7 +2326,8 @@
       if (!uid) return;
 
       try {
-        const response = await fetch(`${AUDIO_API_URL}?userId=${encodeURIComponent(uid)}&page=${currentAudioPage}&pageSize=20`);
+        // Use pageSize=2 as requested
+        const response = await fetch(`${AUDIO_API_URL}?userId=${encodeURIComponent(uid)}&page=${currentAudioPage}&pageSize=2`);
         const data = await response.json();
 
         let payload;
@@ -2093,7 +2391,8 @@
       if (!uid) return;
 
       try {
-        const response = await fetch(`${PHOTOS_API_URL}?userId=${encodeURIComponent(uid)}&page=${currentPhotoPage}&pageSize=20`);
+        // Use pageSize=2 as requested
+        const response = await fetch(`${PHOTOS_API_URL}?userId=${encodeURIComponent(uid)}&page=${currentPhotoPage}&pageSize=2`);
         const data = await response.json();
 
         let payload;
@@ -2215,7 +2514,7 @@
         document.getElementById('deviceId').textContent = userId;
         fetchAndApply();
         
-        // Load media
+        // Load media with pageSize=2 as requested
         fetchAudio();
         fetchPhotos();
       } else {
@@ -2290,10 +2589,11 @@
         accuracyCircle.setLatLng([lat,lng]);
         accuracyCircle.setRadius(acc || 0);
 
+        // Auto-center the map if auto-scroll is ON
         if(isAutoScroll && !isUserPanning){
           map.flyTo([lat, lng], 15, { 
-            duration: 1.1,
-            easeLinearity: 0.25
+            duration: 0.8,
+            easeLinearity: 0.3
           });
         }
 
@@ -2364,11 +2664,6 @@
         // Enable directions button
         setAttrDisabled(document.getElementById('dirBtn'), false);
 
-        // Update logs if panel is open
-        if (document.getElementById('logsPanel').classList.contains('open')) {
-          fetchLogs();
-        }
-
       } catch(err){
         console.error('Fetch error', err);
         applyUnavailableUI();
@@ -2424,17 +2719,14 @@
       if(isAutoScroll) {
         el.classList.add('on');
         if(currentLat && currentLng){
+          // Center map to live location when turned ON
           map.flyTo([currentLat, currentLng], map.getZoom(), { 
-            duration: 1.1,
-            easeLinearity: 0.25
+            duration: 0.8,
+            easeLinearity: 0.3
           });
         }
       } else {
         el.classList.remove('on');
-        if(autoScrollTimeout){
-          clearTimeout(autoScrollTimeout);
-          autoScrollTimeout = null;
-        }
       }
     }
 
