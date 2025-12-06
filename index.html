@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Public Safety System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Public Safety System - Desktop Dashboard</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <!-- Lucide Icons -->
@@ -11,8 +11,8 @@
   <!-- Poppins Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    :root{
+ <style>
+      :root{
       --bg-main: rgba(16,18,27,0.45);
       --card-border: rgba(255,255,255,0.08);
       --text-main: #f9fafb;
@@ -45,14 +45,16 @@
     body{
       font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       color: var(--text-main);
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
       position: relative;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      background: #000;
+      padding: 20px;
+      overflow: auto;
     }
 
     /* Video Background */
@@ -81,9 +83,11 @@
       z-index: -1;
     }
 
-    /* Main Glass Card Container */
+    /* Main Glass Card Container - RESPONSIVE */
     .glass-card {
-      width: 1100px;
+      width: min(1200px, 100%);
+      height: min(800px, calc(100vh - 40px));
+      min-height: 650px;
       background: var(--bg-main);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
@@ -94,13 +98,12 @@
       position: relative;
       z-index: 1;
       transition: var(--transition);
-      margin: 0 auto;
-      transform: translateX(0);
+      display: flex;
+      flex-direction: column;
     }
 
     .glass-card.with-logs {
-      width: 1400px;
-      transform: translateX(0);
+      width: min(1600px, 100%);
     }
 
     .glass-card.blurred-bg {
@@ -111,26 +114,27 @@
 
     /* HEADER - Redesigned with Status Strip */
     .dash-header{
-      padding: 20px 28px 16px;
+      padding: 18px 24px 14px;
       position: relative;
+      flex-shrink: 0;
     }
 
     .header-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .dash-title{
       display: flex;
-      gap: 12px;
+      gap: 10px;
       align-items: center;
     }
 
     .dash-title h2{
       margin: 0;
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 700;
       color: var(--text-main);
       letter-spacing: 0.2px;
@@ -138,7 +142,7 @@
 
     .header-actions{
       display: flex;
-      gap: 12px;
+      gap: 10px;
       align-items: center;
     }
 
@@ -147,10 +151,10 @@
       align-items: center;
       gap: 6px;
       cursor: pointer;
-      padding: 8px 16px;
+      padding: 8px 14px;
       border-radius: var(--radius);
       color: var(--text-muted);
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -164,8 +168,8 @@
     }
 
     .icon-btn i {
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       stroke-width: 2;
     }
 
@@ -189,18 +193,31 @@
       background: var(--offline);
     }
 
-    /* Main Content Grid */
+    /* Main Content Grid - Responsive */
     .dash-main{
       display: grid;
-      grid-template-columns: 300px 1fr;
+      grid-template-columns: 280px 1fr;
+      grid-template-rows: 1fr;
       gap: 16px;
-      padding: 0 28px 20px;
-      align-items: start;
+      padding: 0 24px 16px;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+      height: calc(100% - 80px);
       transition: grid-template-columns 0.35s ease;
     }
 
     .glass-card.with-logs .dash-main {
-      grid-template-columns: 300px 1fr 400px;
+      grid-template-columns: 280px 1fr 420px;
+      height: calc(100% - 80px);
+    }
+
+    /* For low heights (<= 768px), allow inner scroll instead of overlap */
+    @media (max-height: 768px) {
+      .dash-main {
+        overflow-y: auto;
+        min-height: 500px;
+      }
     }
 
     /* Left Column - Cards */
@@ -208,6 +225,24 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+      height: 100%;
+      overflow-y: auto;
+      padding-right: 4px;
+      min-height: 0;
+    }
+
+    .left-col::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .left-col::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 2px;
+    }
+
+    .left-col::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 2px;
     }
 
     .card{
@@ -218,6 +253,7 @@
       padding: 20px;
       border: 1px solid var(--card-border);
       transition: var(--transition-fast);
+      flex-shrink: 0;
     }
 
     .card:hover {
@@ -228,7 +264,7 @@
     .card-header {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       margin-bottom: 16px;
       padding-bottom: 10px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
@@ -259,7 +295,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 3px 0;
+      padding: 4px 0;
       border-bottom: 1px solid rgba(255, 255, 255, 0.03);
     }
 
@@ -318,14 +354,14 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
-      font-size: 14px;
+      font-size: 13px;
     }
 
     .loc-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 3px 0;
+      padding: 4px 0;
       border-bottom: 1px solid rgba(255, 255, 255, 0.03);
     }
 
@@ -346,17 +382,17 @@
     }
 
     .address-box {
-      margin-top: 6px;
-      padding-top: 6px;
+      margin-top: 8px;
+      padding-top: 8px;
       border-top: 1px solid rgba(255, 255, 255, 0.04);
       font-size: 13px;
-      line-height: 1.3;
+      line-height: 1.4;
       color: var(--text-main);
     }
 
     .address-box .loc-label {
       display: block;
-      margin-bottom: 2px;
+      margin-bottom: 4px;
     }
 
     /* Settings Card */
@@ -389,7 +425,7 @@
 
     /* Toggle Switch */
     .toggle{
-      width: 40px;
+      width: 42px;
       height: 20px;
       border-radius: 20px;
       background: rgba(255, 255, 255, 0.1);
@@ -405,7 +441,7 @@
       background: #ffffff;
       border-radius: 50%;
       position: absolute;
-      top: 1px;
+      top: 2px;
       left: 2px;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       box-shadow: 0 1px 3px rgba(0,0,0,0.3);
@@ -417,7 +453,7 @@
     }
 
     .toggle.on .dot{
-      transform: translateX(18px);
+      transform: translateX(20px);
     }
 
     /* Custom Select Dropdown */
@@ -438,8 +474,8 @@
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f9fafb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 10px center;
-      background-size: 16px;
-      min-width: 120px;
+      background-size: 14px;
+      min-width: 110px;
     }
 
     .auto-refresh-select:focus {
@@ -449,33 +485,24 @@
       box-shadow: 0 0 0 2px rgba(58, 111, 240, 0.1);
     }
 
-    /* Custom dropdown options styling */
     .auto-refresh-select option {
       background: #2e3134;
       color: var(--text-main);
-      padding: 10px;
+      padding: 8px;
       font-size: 13px;
       border: none;
     }
 
-    .auto-refresh-select option:hover {
-      background: #3a6df0;
-      color: white;
-    }
-
-    .auto-refresh-select option:checked {
-      background: var(--accent);
-      color: white;
-    }
-
-    /* Map Area */
+    /* Map Area - FIXED STRUCTURE */
     .map-card{
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      flex: 1;
+      min-height: 0;
+      height: 100%;
       position: relative;
       width: 100%;
-      transition: width 0.35s ease;
+      overflow: hidden;
     }
 
     .map-frame{
@@ -487,13 +514,28 @@
       border: 1px solid var(--card-border);
       position: relative;
       width: 100%;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
     }
 
     #map{
-      height: 320px;
+      flex: 1 1 auto;
+      min-height: 260px;
       border-radius: var(--radius);
-      transition: height 0.3s ease;
       background: #1a1d28;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Prevent Leaflet from overriding the height */
+    #map.leaflet-container {
+      height: 100% !important;
+      width: 100% !important;
     }
 
     .map-header {
@@ -501,6 +543,8 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
+      flex-shrink: 0;
+      padding-bottom: 0;
     }
 
     .map-title {
@@ -528,26 +572,32 @@
     .map-controls{
       display: flex;
       gap: 10px;
-      margin-top: 16px;
+      margin-top: 12px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
     }
 
     .btn{
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 10px 18px;
+      padding: 10px 16px;
       border-radius: var(--radius);
       border: none;
       cursor: pointer;
       font-weight: 600;
-      font-size: 14px;
+      font-size: 13px;
       transition: var(--transition-fast);
       font-family: 'Poppins', sans-serif;
+      white-space: nowrap;
+      flex: 1;
+      min-width: 120px;
+      justify-content: center;
     }
 
     .btn i {
       width: 16px;
-      height: 16px;
+      height: 14px;
       stroke-width: 2;
     }
 
@@ -558,6 +608,7 @@
 
     .btn-refresh:hover {
       background: #2a5ce6;
+      transform: translateY(-1px);
     }
 
     .btn-directions{
@@ -568,6 +619,7 @@
 
     .btn-directions:hover {
       background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-1px);
     }
 
     .btn-expand{
@@ -578,6 +630,7 @@
 
     .btn-expand:hover {
       background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-1px);
     }
 
     .btn-logs{
@@ -588,6 +641,7 @@
 
     .btn-logs:hover {
       background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-1px);
     }
 
     .btn.disabled{
@@ -596,81 +650,217 @@
       pointer-events: none;
     }
 
-    /* Media Panel */
+    /* Media Panel - COMPACT AND ALWAYS VISIBLE */
     .media-panel {
       background: rgba(255, 255, 255, 0.03);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border-radius: var(--radius-lg);
       border: 1px solid var(--card-border);
-      padding: 20px;
+      padding: 12px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      height: auto;
+      min-height: 90px;
+      margin-top: 12px;
     }
 
     .media-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      gap: 16px;
+      height: 100%;
     }
 
-    .media-card {
+    .media-tile {
       background: rgba(255, 255, 255, 0.02);
       border-radius: var(--radius-lg);
       border: 1px solid rgba(255, 255, 255, 0.06);
-      overflow: hidden;
+      padding: 14px;
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      height: 100%;
+      min-height: 0;
     }
 
-    .media-header {
-      padding: 16px;
+    .media-tile:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .media-tile-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .media-tile-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(58, 111, 240, 0.1);
+      color: var(--accent);
+    }
+
+    .media-tile-icon i {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2;
+    }
+
+    .media-tile-info h4 {
+      margin: 0;
+      font-size: 12px;
+      color: var(--text-main);
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .media-tile-info p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .media-tile-expand {
+      color: var(--text-muted);
+      transition: var(--transition-fast);
+    }
+
+    .media-tile:hover .media-tile-expand {
+      color: var(--text-main);
+      transform: scale(1.1);
+    }
+
+    /* Overlay Panels */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .overlay.active {
+      display: flex;
+    }
+
+    .overlay-content {
+      background: var(--bg-main);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--card-border);
+      width: min(800px, 90%);
+      height: min(600px, 90%);
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .overlay-header {
+      padding: 20px 24px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .overlay-header h3 {
+      margin: 0;
+      font-size: 18px;
+      color: var(--text-main);
+      font-weight: 600;
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    .media-header h4 {
-      margin: 0;
-      font-size: 14px;
-      color: var(--text-main);
-      font-weight: 600;
+    .overlay-header h3 i {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2;
+      color: var(--accent);
     }
 
-    .media-header i {
+    .overlay-close {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .overlay-close:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+    }
+
+    .overlay-close i {
       width: 18px;
       height: 18px;
       stroke-width: 2;
-      color: var(--text-muted);
     }
 
-    .media-list {
+    .overlay-body {
       flex: 1;
-      max-height: 200px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    /* Media List Container */
+    .media-list-container {
+      flex: 1;
       overflow-y: auto;
-      padding: 8px 0;
+      padding: 20px;
+      min-height: 0;
     }
 
-    /* Custom scrollbar for media lists */
-    .media-list::-webkit-scrollbar {
-      width: 4px;
+    .media-list-container::-webkit-scrollbar {
+      width: 6px;
     }
 
-    .media-list::-webkit-scrollbar-track {
+    .media-list-container::-webkit-scrollbar-track {
       background: rgba(255, 255, 255, 0.03);
-      border-radius: 2px;
+      border-radius: 3px;
     }
 
-    .media-list::-webkit-scrollbar-thumb {
+    .media-list-container::-webkit-scrollbar-thumb {
       background: rgba(255, 255, 255, 0.15);
-      border-radius: 2px;
+      border-radius: 3px;
     }
 
-    .media-list::-webkit-scrollbar-thumb:hover {
+    .media-list-container::-webkit-scrollbar-thumb:hover {
       background: rgba(255, 255, 255, 0.25);
     }
 
+    /* Media Items */
     .media-item {
-      padding: 12px 16px;
+      padding: 12px 14px;
       display: flex;
       align-items: center;
       gap: 12px;
@@ -688,9 +878,9 @@
     }
 
     .media-thumbnail {
-      width: 44px;
-      height: 44px;
-      border-radius: 8px;
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
       overflow: hidden;
       flex-shrink: 0;
       background: rgba(255, 255, 255, 0.05);
@@ -710,8 +900,8 @@
     }
 
     .media-thumbnail.audio i {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       color: var(--accent);
     }
 
@@ -755,8 +945,8 @@
     }
 
     .media-action i {
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       stroke-width: 2;
       color: var(--text-main);
     }
@@ -764,27 +954,28 @@
     .no-media {
       text-align: center;
       color: var(--text-muted);
-      padding: 40px 25px;
+      padding: 40px 20px;
       font-size: 13px;
       font-style: italic;
     }
 
     /* Media Pagination */
     .media-pagination {
-      padding: 12px 16px;
+      padding: 16px 20px;
       border-top: 1px solid rgba(255, 255, 255, 0.06);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-shrink: 0;
     }
 
     .pagination-btn {
-      padding: 6px 12px;
+      padding: 8px 14px;
       border: 1px solid rgba(255, 255, 255, 0.1);
       background: rgba(255, 255, 255, 0.05);
       color: var(--text-main);
       border-radius: var(--radius);
-      font-size: 12px;
+      font-size: 13px;
       cursor: pointer;
       transition: var(--transition-fast);
     }
@@ -792,6 +983,7 @@
     .pagination-btn:hover:not(:disabled) {
       background: rgba(255, 255, 255, 0.1);
       border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
     }
 
     .pagination-btn:disabled {
@@ -800,7 +992,7 @@
     }
 
     .pagination-info {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--text-muted);
     }
 
@@ -812,6 +1004,9 @@
       opacity: 0;
       transform: translateX(20px);
       transition: opacity 0.35s ease, transform 0.35s ease;
+      width: 420px;
+      height: 100%;
+      min-height: 0;
     }
 
     .glass-card.with-logs .logs-column {
@@ -830,6 +1025,7 @@
       display: flex;
       flex-direction: column;
       height: 100%;
+      min-height: 0;
     }
 
     .logs-header {
@@ -839,6 +1035,7 @@
       margin-bottom: 16px;
       padding-bottom: 12px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      flex-shrink: 0;
     }
 
     .logs-header h3 {
@@ -853,7 +1050,7 @@
       border: none;
       color: var(--text-muted);
       cursor: pointer;
-      padding: 8px;
+      padding: 6px;
       border-radius: var(--radius);
       transition: var(--transition-fast);
     }
@@ -873,6 +1070,7 @@
       display: flex;
       margin-bottom: 16px;
       gap: 4px;
+      flex-shrink: 0;
     }
 
     .logs-tab {
@@ -919,11 +1117,12 @@
       border-radius: var(--radius);
       background: rgba(255, 255, 255, 0.02);
       border: 1px solid rgba(255, 255, 255, 0.06);
+      min-height: 0;
     }
 
     /* Custom scrollbar for logs */
     .logs-content::-webkit-scrollbar {
-      width: 6px;
+      width: 5px;
     }
 
     .logs-content::-webkit-scrollbar-track {
@@ -947,7 +1146,7 @@
     }
 
     .log-item {
-      padding: 12px 16px;
+      padding: 12px 14px;
       border-radius: var(--radius);
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.05);
@@ -999,11 +1198,11 @@
     /* New Log Indicator */
     .new-log-indicator {
       position: sticky;
-      bottom: 16px;
+      bottom: 12px;
       left: 0;
       right: 0;
-      margin: 8px 16px;
-      padding: 8px 16px;
+      margin: 6px 12px;
+      padding: 8px 14px;
       background: rgba(58, 111, 240, 0.2);
       border: 1px solid rgba(58, 111, 240, 0.3);
       color: var(--text-main);
@@ -1020,6 +1219,7 @@
     .new-log-indicator:hover {
       background: rgba(58, 111, 240, 0.3);
       border-color: rgba(58, 111, 240, 0.4);
+      transform: translateY(-1px);
     }
 
     /* Pagination */
@@ -1030,46 +1230,49 @@
       padding-top: 16px;
       margin-top: 16px;
       border-top: 1px solid rgba(255,255,255,0.06);
+      flex-shrink: 0;
     }
 
-    .pagination-btn {
-      padding: 8px 16px;
+    .logs-pagination .pagination-btn {
+      padding: 8px 14px;
       border: 1px solid rgba(255,255,255,0.1);
       background: rgba(255,255,255,0.05);
       color: var(--text-main);
       border-radius: var(--radius);
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       cursor: pointer;
       transition: var(--transition-fast);
     }
 
-    .pagination-btn:hover:not(:disabled) {
+    .logs-pagination .pagination-btn:hover:not(:disabled) {
       background: rgba(255, 255, 255, 0.1);
       border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
     }
 
-    .pagination-btn:disabled {
+    .logs-pagination .pagination-btn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
 
-    .pagination-info {
-      font-size: 14px;
+    .logs-pagination .pagination-info {
+      font-size: 13px;
       color: var(--text-muted);
     }
 
     /* Bottom Row */
     .bottom-row{
-      padding: 16px 28px;
+      padding: 14px 24px;
       display: flex;
-      gap: 32px;
+      gap: 24px;
       align-items: center;
       justify-content: space-between;
       border-top: 1px solid rgba(255,255,255,0.06);
       color: var(--text-muted);
       font-size: 12px;
       background: rgba(0, 0, 0, 0.2);
+      flex-shrink: 0;
     }
 
     .bottom-item {
@@ -1083,11 +1286,11 @@
       font-weight: 600;
     }
 
-    /* Custom Modern Map Marker - Added */
+    /* Custom Modern Map Marker */
     .modern-marker {
       position: relative;
-      width: 36px;
-      height: 48px;
+      width: 34px;
+      height: 44px;
       cursor: pointer;
       transition: all 0.3s ease;
       filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
@@ -1095,8 +1298,8 @@
 
     .modern-marker .pin-body {
       position: absolute;
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
       border-radius: 50% 50% 50% 0;
       transform: rotate(-45deg);
@@ -1136,24 +1339,24 @@
 
     .modern-marker .pin-pulse {
       position: absolute;
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       background: var(--accent);
       border-radius: 50%;
       top: 0;
-      left: -6px;
+      left: -5px;
       opacity: 0.15;
       animation: pulse 2s infinite;
     }
 
     .modern-marker .pin-stem {
       position: absolute;
-      width: 4px;
+      width: 3px;
       height: 12px;
       background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%);
       border-radius: 2px;
       bottom: 0;
-      left: 16px;
+      left: 15.5px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
@@ -1250,13 +1453,13 @@
     /* Exit Fullscreen Button */
     .exit-fullscreen-btn {
       position: fixed;
-      top: 24px;
-      right: 24px;
+      top: 20px;
+      right: 20px;
       z-index: 10001;
       background: rgba(255, 255, 255, 0.95);
       color: #1a1d28;
       border: none;
-      padding: 12px 20px;
+      padding: 10px 18px;
       border-radius: var(--radius);
       font-weight: 600;
       cursor: pointer;
@@ -1265,8 +1468,9 @@
       box-shadow: var(--shadow-md);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       font-family: 'Poppins', sans-serif;
+      font-size: 13px;
     }
 
     .exit-fullscreen-btn:hover {
@@ -1309,7 +1513,7 @@
       -webkit-backdrop-filter: blur(20px);
       border-radius: var(--radius-xl);
       padding: 40px;
-      width: 400px;
+      width: min(400px, 90%);
       box-shadow: var(--shadow-lg);
       border: 1px solid var(--card-border);
       text-align: center;
@@ -1321,7 +1525,7 @@
     
     .login-logo h1 {
       color: var(--text-main);
-      margin: 0 0 8px 0;
+      margin: 0 0 10px 0;
       font-size: 28px;
       font-weight: 700;
     }
@@ -1374,7 +1578,7 @@
       background: var(--accent);
       color: white;
       border: none;
-      padding: 16px;
+      padding: 14px;
       border-radius: var(--radius);
       font-size: 15px;
       font-weight: 600;
@@ -1386,6 +1590,7 @@
     
     .login-btn:hover {
       background: #2a5ce6;
+      transform: translateY(-1px);
     }
 
     .login-btn:disabled {
@@ -1405,7 +1610,7 @@
       color: var(--danger);
       font-size: 14px;
       font-weight: 500;
-      margin-top: -12px;
+      margin-top: -10px;
       margin-bottom: 4px;
       min-height: 20px;
       display: none;
@@ -1423,58 +1628,266 @@
       animation: shake 0.3s ease-in-out;
     }
 
-    /* Responsive */
-    @media (max-width: 1366px){
-      .glass-card{ 
-        width: 96%; 
-        max-width: 1100px; 
-        margin: 20px auto;
+    /* Desktop-specific enhancements */
+    body::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    body::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    body::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+
+    body::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1400px) {
+      .glass-card {
+        width: min(1100px, 100%);
+        height: min(750px, calc(100vh - 40px));
       }
       
       .glass-card.with-logs {
-        width: 96%;
-        max-width: 1400px;
-        margin: 20px auto;
-      }
-      
-      .dash-main{ 
-        grid-template-columns: 1fr; 
-      }
-      
-      .glass-card.with-logs .dash-main {
-        grid-template-columns: 1fr;
-      }
-      
-      .left-col{ 
-        order: 2; 
-      }
-      
-      .map-card{ 
-        order: 1; 
-      }
-      
-      .logs-column {
-        order: 3;
+        width: min(1400px, 100%);
       }
     }
 
-    @media (max-width: 768px){
-      .media-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
+    @media (max-width: 1200px) {
+      .glass-card {
+        width: min(1000px, 100%);
+        height: min(700px, calc(100vh - 40px));
       }
       
-      .map-controls {
-        flex-wrap: wrap;
+      .glass-card.with-logs {
+        width: min(1200px, 100%);
+      }
+      
+      .dash-main {
+        grid-template-columns: 250px 1fr;
+        gap: 12px;
+        padding: 0 20px 12px;
+      }
+      
+      .glass-card.with-logs .dash-main {
+        grid-template-columns: 250px 1fr 380px;
+      }
+      
+      .logs-column {
+        width: 380px;
+      }
+    }
+
+    /* Enhanced responsive height adjustments 
+    @media (max-height: 850px) {
+      .glass-card {
+        height: min(720px, calc(100vh - 30px));
+      }
+      
+      .dash-main {
+        height: calc(100% - 70px);
+      }
+      
+      .media-panel {
+        height: 80px;
+        min-height: 70px;
+        padding: 16px;
+      }
+      
+      .map-frame {
+        padding: 16px;
+      }
+      
+      .card {
+        padding: 16px;
+      }
+    }
+
+    @media (max-height: 768px) {
+      .glass-card {
+        height: min(680px, calc(100vh - 20px));
+      }
+      
+      .dash-main {
+        height: calc(100% - 65px);
+        overflow-y: auto;
+        min-height: 500px;
+      }
+      
+      .dash-header {
+        padding: 14px 20px 10px;
+      }
+      
+      .dash-main {
+        padding: 0 20px 12px;
+        gap: 12px;
+      }
+      
+      .card {
+        padding: 14px;
+      }
+      
+      .map-frame {
+        padding: 14px;
+      }
+      
+      .media-panel {
+        padding: 14px;
+        height: 70px;
+        min-height: 60px;
+      }
+      
+      .media-tile {
+        padding: 12px;
+      }
+      
+      #map {
+        min-height: 200px;
+      }
+      
+      .logs-panel {
+        padding: 14px;
+      }
+    }
+
+    @media (max-height: 700px) {
+      .glass-card {
+        height: min(650px, calc(100vh - 20px));
+      }
+      
+      .dash-main {
+        height: calc(100% - 60px);
+      }
+      
+      .media-panel {
+        height: 60px;
+        min-height: 50px;
+        padding: 12px;
+      }
+      
+      .media-tile {
+        padding: 10px;
+      }
+      
+      .media-tile-icon {
+        width: 32px;
+        height: 32px;
+      }
+      
+      .media-tile-icon i {
+        width: 18px;
+        height: 18px;
+      }
+      
+      .media-tile-info h4 {
+        font-size: 13px;
+      }
+      
+      .media-tile-info p {
+        font-size: 11px;
+      }
+      
+      #map {
+        min-height: 180px;
+      }
+    } */
+
+    /* Specific adjustments for 1366×768 screens */
+    @media (max-height: 768px) and (max-width: 1366px) {
+      .glass-card {
+        width: min(1100px, 95%);
+        height: min(680px, calc(100vh - 15px));
+      }
+      
+      .dash-main {
+        grid-template-columns: 250px 1fr;
+        gap: 12px;
+      }
+      
+      .glass-card.with-logs .dash-main {
+        grid-template-columns: 250px 1fr 380px;
+      }
+      
+      .logs-column {
+        width: 380px;
       }
       
       .btn {
-        flex: 1;
-        min-width: 140px;
-        justify-content: center;
+        min-width: 110px;
+        padding: 8px 12px;
+        font-size: 12px;
       }
     }
-  </style>
+
+    /* Specific adjustments for 1440×900 screens */
+    @media (max-height: 900px) and (max-width: 1440px) {
+      .glass-card {
+        width: min(1150px, 95%);
+        height: min(720px, calc(100vh - 20px));
+      }
+      
+      .dash-main {
+        height: calc(100% - 70px);
+      }
+      
+      .media-panel {
+        height: 85px;
+        min-height: 75px;
+      }
+    }
+
+    /* Ensure map area shrinks properly on very small heights */
+    @media (max-height: 650px) {
+      #map {
+        min-height: 180px;
+      }
+      
+      .map-frame {
+        padding: 12px;
+      }
+      
+      .media-panel {
+        margin-top: 8px;
+      }
+    }
+
+    /* Fallback for extremely tight spaces */
+    @media (max-height: 580px) {
+      .glass-card {
+        height: auto;
+        min-height: 580px;
+      }
+      
+      .dash-main {
+        overflow-y: auto;
+        height: auto;
+        min-height: 450px;
+      }
+      
+      .map-card {
+        min-height: 400px;
+      }
+      
+      #map {
+        min-height: 160px;
+      }
+    }
+
+    /* Prevent map from expanding beyond available space */
+    .glass-card:not(.with-logs) .dash-main {
+      grid-template-rows: 1fr;
+    }
+
+    .glass-card:not(.with-logs) .map-card {
+      max-height: 100%;
+    }
+ </style>
 </head>
 <body>
 
@@ -1641,46 +2054,38 @@
           </div>
         </div>
 
-        <!-- Media Panel -->
+        <!-- Compact Media Panel - NEW DESIGN -->
         <div class="media-panel">
           <div class="media-grid">
-            <!-- Audio Recordings Card -->
-            <div class="media-card">
-              <div class="media-header">
-                <i data-lucide="play-circle"></i>
-                <h4>Audio Recordings</h4>
+            <!-- Audio Recordings Tile -->
+            <div class="media-tile" onclick="openAudioPanel()">
+              <div class="media-tile-content">
+                <div class="media-tile-icon">
+                  <i data-lucide="play-circle"></i>
+                </div>
+                <div class="media-tile-info">
+                  <h4>Audio Recordings</h4>
+                  <p>Click to view and play recordings</p>
+                </div>
               </div>
-              <div class="media-list" id="audioList">
-                <div class="no-media">Loading audio...</div>
-              </div>
-              <div class="media-pagination" id="audioPagination" style="display: none;">
-                <button class="pagination-btn" id="audioPrevBtn" onclick="changeAudioPage(-1)">
-                  Previous
-                </button>
-                <div class="pagination-info" id="audioPageInfo">Page 1 of 1</div>
-                <button class="pagination-btn" id="audioNextBtn" onclick="changeAudioPage(1)">
-                  Next
-                </button>
+              <div class="media-tile-expand">
+                <i data-lucide="maximize-2"></i>
               </div>
             </div>
 
-            <!-- Photos Card -->
-            <div class="media-card">
-              <div class="media-header">
-                <i data-lucide="image"></i>
-                <h4>Photos</h4>
+            <!-- Photos Tile -->
+            <div class="media-tile" onclick="openPhotoPanel()">
+              <div class="media-tile-content">
+                <div class="media-tile-icon">
+                  <i data-lucide="image"></i>
+                </div>
+                <div class="media-tile-info">
+                  <h4>Photos</h4>
+                  <p>Click to view photos</p>
+                </div>
               </div>
-              <div class="media-list" id="photoList">
-                <div class="no-media">Loading photos...</div>
-              </div>
-              <div class="media-pagination" id="photoPagination" style="display: none;">
-                <button class="pagination-btn" id="photoPrevBtn" onclick="changePhotoPage(-1)">
-                  Previous
-                </button>
-                <div class="pagination-info" id="photoPageInfo">Page 1 of 1</div>
-                <button class="pagination-btn" id="photoNextBtn" onclick="changePhotoPage(1)">
-                  Next
-                </button>
+              <div class="media-tile-expand">
+                <i data-lucide="maximize-2"></i>
               </div>
             </div>
           </div>
@@ -1734,7 +2139,59 @@
         <strong>Device:</strong> <span id="bottomDevice">unavailable</span>
       </div>
       <div class="bottom-item">
-        <strong>Version:</strong> v2.1 Dark
+        <strong>Version:</strong> v2.1 Desktop
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio Overlay Panel -->
+  <div class="overlay" id="audioOverlay">
+    <div class="overlay-content">
+      <div class="overlay-header">
+        <h3><i data-lucide="play-circle"></i> Audio Recordings</h3>
+        <button class="overlay-close" onclick="closeAudioPanel()">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="overlay-body">
+        <div class="media-list-container" id="audioListContainer">
+          <div class="no-media">Loading audio...</div>
+        </div>
+        <div class="media-pagination" id="audioPagination" style="display: none;">
+          <button class="pagination-btn" id="audioPrevBtn" onclick="changeAudioPage(-1)">
+            Previous
+          </button>
+          <div class="pagination-info" id="audioPageInfo">Page 1 of 1</div>
+          <button class="pagination-btn" id="audioNextBtn" onclick="changeAudioPage(1)">
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Photos Overlay Panel -->
+  <div class="overlay" id="photoOverlay">
+    <div class="overlay-content">
+      <div class="overlay-header">
+        <h3><i data-lucide="image"></i> Photos</h3>
+        <button class="overlay-close" onclick="closePhotoPanel()">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="overlay-body">
+        <div class="media-list-container" id="photoListContainer">
+          <div class="no-media">Loading photos...</div>
+        </div>
+        <div class="media-pagination" id="photoPagination" style="display: none;">
+          <button class="pagination-btn" id="photoPrevBtn" onclick="changePhotoPage(-1)">
+            Previous
+          </button>
+          <div class="pagination-info" id="photoPageInfo">Page 1 of 1</div>
+          <button class="pagination-btn" id="photoNextBtn" onclick="changePhotoPage(1)">
+            Next
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -1750,7 +2207,7 @@
     <div class="login-container" id="loginContainer">
       <div class="login-logo">
         <h1>Public Safety System</h1>
-        <p>Secure Location Tracking Dashboard</p>
+        <p>Desktop Tracking Dashboard</p>
       </div>
       
       <form id="loginForm" class="login-form">
@@ -1854,7 +2311,7 @@
     
     function showUserInfo() {
       const userId = getUserId();
-      alert(`Current User ID: ${userId}\n\nPublic Safety Tracking System v2.1 Dark`);
+      alert(`Current User ID: ${userId}\n\nPublic Safety Tracking System v2.1 Desktop Edition`);
     }
     
     /**************** DASHBOARD FUNCTIONALITY *****************/
@@ -1874,7 +2331,7 @@
     let currentLogsMode = 'realtime';
     let realtimeLogsInterval = null;
     let realtimeLogsList = [];
-    let lastRealtimeLogKey = null; // Track the last log to detect new ones
+    let lastRealtimeLogKey = null;
     let userScrolledUp = false;
     let newLogsAvailable = false;
 
@@ -1896,15 +2353,12 @@
       const statusDot = document.getElementById('statusDot');
       const statusText = document.getElementById('deviceStatus');
       
-      // Remove all status classes
       statusStrip.classList.remove('online', 'fetching', 'offline');
       statusDot.classList.remove('online', 'fetching', 'offline');
       
-      // Add new status class
       statusStrip.classList.add(status);
       statusDot.classList.add(status);
       
-      // Set status text
       const statusMap = {
         online: 'Online',
         fetching: 'Fetching...',
@@ -1929,8 +2383,8 @@
       const currentUrl = window.location.href;
       if (navigator.share) {
         navigator.share({
-          title: 'Public Safety System',
-          text: 'Check out this public safety system location tracker',
+          title: 'Public Safety System - Desktop',
+          text: 'Check out this public safety system desktop tracking dashboard',
           url: currentUrl
         })
         .catch(err => {
@@ -1955,7 +2409,9 @@
 
       map = L.map('map', { 
         zoomControl: true,
-        scrollWheelZoom: true
+        scrollWheelZoom: true,
+        zoomSnap: 0.1,
+        zoomDelta: 0.5
       }).setView([20.5937,78.9629], 5);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -1963,7 +2419,6 @@
         attribution: '© OpenStreetMap contributors'
       }).addTo(map);
 
-      // Create custom modern marker
       const ModernMarkerIcon = L.divIcon({
         className: 'modern-marker',
         html: `
@@ -1973,9 +2428,9 @@
             <div class="pin-stem"></div>
           </div>
         `,
-        iconSize: [36, 48],
-        iconAnchor: [18, 48],
-        popupAnchor: [0, -48]
+        iconSize: [34, 44],
+        iconAnchor: [17, 44],
+        popupAnchor: [0, -44]
       });
 
       marker = L.marker([20.5937,78.9629], { icon: ModernMarkerIcon }).addTo(map);
@@ -1983,10 +2438,10 @@
         radius: 0, 
         color: '#3a6df0', 
         opacity: 0.3, 
-        fillOpacity: 0.15
+        fillOpacity: 0.15,
+        weight: 2
       }).addTo(map);
 
-      // Setup map events for auto-scroll behavior
       map.on('dragstart', function() {
         if (isAutoScroll) {
           isUserPanning = true;
@@ -1995,7 +2450,6 @@
 
       map.on('dragend', function() {
         if (isAutoScroll && isUserPanning && currentLat && currentLng) {
-          // Auto-center to live location immediately after drag ends
           map.flyTo([currentLat, currentLng], map.getZoom(), { 
             duration: 0.8,
             easeLinearity: 0.3
@@ -2004,9 +2458,7 @@
         }
       });
 
-      // Also handle moveend for other types of movement
       map.on('moveend', function() {
-        // If user panned with keyboard or other controls and auto-scroll is ON, snap back
         if (isAutoScroll && isUserPanning && currentLat && currentLng) {
           map.flyTo([currentLat, currentLng], map.getZoom(), { 
             duration: 0.8,
@@ -2017,32 +2469,56 @@
       });
     }
 
+    /**************** OVERLAY PANEL FUNCTIONS *****************/
+    function openAudioPanel() {
+      document.getElementById('audioOverlay').classList.add('active');
+      fetchAudio();
+    }
+
+    function closeAudioPanel() {
+      document.getElementById('audioOverlay').classList.remove('active');
+    }
+
+    function openPhotoPanel() {
+      document.getElementById('photoOverlay').classList.add('active');
+      fetchPhotos();
+    }
+
+    function closePhotoPanel() {
+      document.getElementById('photoOverlay').classList.remove('active');
+    }
+
     /**************** LOGS PANEL FUNCTIONS *****************/
     function openLogsPanel() {
       const dashboard = document.getElementById('dashboard');
       dashboard.classList.add('with-logs');
       
-      // Load logs
+      setTimeout(() => {
+        if (map) map.invalidateSize();
+      }, 350);
+      
       fetchLogs();
       
-      // Start realtime polling if in realtime mode
       if (currentLogsMode === 'realtime') {
         startRealtimePolling();
       }
       
-      // Setup scroll listener for new log indicator
       const logsContent = document.querySelector('.logs-content');
-      logsContent.addEventListener('scroll', handleLogsScroll);
+      if (logsContent) {
+        logsContent.addEventListener('scroll', handleLogsScroll);
+      }
     }
 
     function closeLogsPanel() {
       const dashboard = document.getElementById('dashboard');
       dashboard.classList.remove('with-logs');
       
-      // Stop realtime polling
+      setTimeout(() => {
+        if (map) map.invalidateSize();
+      }, 350);
+      
       stopRealtimePolling();
       
-      // Remove scroll listener
       const logsContent = document.querySelector('.logs-content');
       if (logsContent) {
         logsContent.removeEventListener('scroll', handleLogsScroll);
@@ -2053,17 +2529,14 @@
       currentLogsMode = mode;
       currentLogsPage = 1;
       
-      // Update active tab
       document.querySelectorAll('.logs-tab').forEach(tab => {
         tab.classList.toggle('active', tab.textContent.includes(mode === 'realtime' ? 'Realtime Logs' : 'Full Log List'));
       });
       
-      // Show/hide pagination
       document.getElementById('logsPagination').style.display = mode === 'full' ? 'flex' : 'none';
       
       if (mode === 'realtime') {
         startRealtimePolling();
-        // Clear and fetch fresh logs for tail mode
         realtimeLogsList = [];
         lastRealtimeLogKey = null;
         userScrolledUp = false;
@@ -2079,7 +2552,7 @@
       stopRealtimePolling();
       realtimeLogsInterval = setInterval(() => {
         fetchLatestLog();
-      }, 5000); // Poll every 5 seconds for realtime logs
+      }, 5000);
     }
 
     function stopRealtimePolling() {
@@ -2095,12 +2568,10 @@
       const scrollHeight = logsContent.scrollHeight;
       const clientHeight = logsContent.clientHeight;
       
-      // If user is within 100px of the bottom, consider them "at the bottom"
       const isNearBottom = (scrollHeight - scrollTop - clientHeight) < 100;
       
       if (isNearBottom) {
         userScrolledUp = false;
-        // Hide new log indicator if user scrolls back to bottom
         hideNewLogIndicator();
       } else {
         userScrolledUp = true;
@@ -2144,7 +2615,6 @@
       if (!uid) return;
 
       try {
-        // Fetch only the latest log
         const response = await fetch(`${HISTORY_API_URL}?userId=${encodeURIComponent(uid)}&page=1&pageSize=1`);
         const data = await response.json();
 
@@ -2164,24 +2634,19 @@
         const latestLog = payload.logs[0];
         const logKey = `${latestLog.loggedAt}_${latestLog.lat}_${latestLog.lng}`;
         
-        // Check if this is a new log
         if (logKey !== lastRealtimeLogKey) {
           lastRealtimeLogKey = logKey;
           realtimeLogsList.unshift(latestLog);
           
-          // Keep only last 50 logs in memory
           if (realtimeLogsList.length > 50) {
             realtimeLogsList.pop();
           }
           
-          // Update UI
           renderRealtimeLogs();
           
-          // Handle scroll behavior
           if (userScrolledUp) {
             showNewLogIndicator();
           } else {
-            // Auto-scroll to bottom
             setTimeout(scrollToBottom, 100);
           }
         }
@@ -2199,7 +2664,6 @@
       }
 
       let logsHTML = '';
-      // Show logs in chronological order (oldest to newest)
       [...realtimeLogsList].reverse().forEach(log => {
         const time = log.timestamp || new Date(log.loggedAt).toLocaleTimeString();
         const loggedAt = log.loggedAt ? new Date(log.loggedAt).toLocaleString() : 'Unknown';
@@ -2230,7 +2694,6 @@
       
       try {
         if (currentLogsMode === 'realtime') {
-          // For realtime mode, fetch initial latest log
           const response = await fetch(`${HISTORY_API_URL}?userId=${encodeURIComponent(uid)}&page=1&pageSize=1`);
           const data = await response.json();
 
@@ -2253,11 +2716,9 @@
           realtimeLogsList = [latestLog];
           
           renderRealtimeLogs();
-          // Scroll to bottom initially
           setTimeout(scrollToBottom, 100);
           
         } else {
-          // Full list mode with pagination
           const response = await fetch(`${HISTORY_API_URL}?userId=${encodeURIComponent(uid)}&page=${currentLogsPage}&pageSize=20`);
           const data = await response.json();
 
@@ -2278,7 +2739,6 @@
           const logs = payload.logs || [];
           totalLogsPages = payload.totalPages || 1;
 
-          // Update pagination
           document.getElementById("pageInfo").textContent = `Page ${currentLogsPage} of ${totalLogsPages}`;
           document.getElementById("prevBtn").disabled = currentLogsPage <= 1;
           document.getElementById("nextBtn").disabled = currentLogsPage >= totalLogsPages || logs.length === 0;
@@ -2326,8 +2786,7 @@
       if (!uid) return;
 
       try {
-        // Use pageSize=2 as requested
-        const response = await fetch(`${AUDIO_API_URL}?userId=${encodeURIComponent(uid)}&page=${currentAudioPage}&pageSize=2`);
+        const response = await fetch(`${AUDIO_API_URL}?userId=${encodeURIComponent(uid)}&page=${currentAudioPage}&pageSize=10`);
         const data = await response.json();
 
         let payload;
@@ -2339,7 +2798,7 @@
           }
         } else payload = data;
 
-        const audioList = document.getElementById('audioList');
+        const audioList = document.getElementById('audioListContainer');
         
         if (payload.success === false || !payload.audio || payload.audio.length === 0) {
           audioList.innerHTML = '<div class="no-media">No recordings yet</div>';
@@ -2350,7 +2809,6 @@
         const audioItems = payload.audio || [];
         totalAudioPages = payload.totalPages || 1;
 
-        // Update pagination
         document.getElementById("audioPageInfo").textContent = `Page ${currentAudioPage} of ${totalAudioPages}`;
         document.getElementById("audioPrevBtn").disabled = currentAudioPage <= 1;
         document.getElementById("audioNextBtn").disabled = currentAudioPage >= totalAudioPages;
@@ -2382,7 +2840,7 @@
         
       } catch (error) {
         console.error('Error fetching audio:', error);
-        document.getElementById('audioList').innerHTML = '<div class="no-media">Error loading recordings</div>';
+        document.getElementById('audioListContainer').innerHTML = '<div class="no-media">Error loading recordings</div>';
       }
     }
 
@@ -2391,8 +2849,7 @@
       if (!uid) return;
 
       try {
-        // Use pageSize=2 as requested
-        const response = await fetch(`${PHOTOS_API_URL}?userId=${encodeURIComponent(uid)}&page=${currentPhotoPage}&pageSize=2`);
+        const response = await fetch(`${PHOTOS_API_URL}?userId=${encodeURIComponent(uid)}&page=${currentPhotoPage}&pageSize=10`);
         const data = await response.json();
 
         let payload;
@@ -2404,7 +2861,7 @@
           }
         } else payload = data;
 
-        const photoList = document.getElementById('photoList');
+        const photoList = document.getElementById('photoListContainer');
         
         if (payload.success === false || !payload.photos || payload.photos.length === 0) {
           photoList.innerHTML = '<div class="no-media">No photos yet</div>';
@@ -2415,7 +2872,6 @@
         const photoItems = payload.photos || [];
         totalPhotoPages = payload.totalPages || 1;
 
-        // Update pagination
         document.getElementById("photoPageInfo").textContent = `Page ${currentPhotoPage} of ${totalPhotoPages}`;
         document.getElementById("photoPrevBtn").disabled = currentPhotoPage <= 1;
         document.getElementById("photoNextBtn").disabled = currentPhotoPage >= totalPhotoPages;
@@ -2447,7 +2903,7 @@
         
       } catch (error) {
         console.error('Error fetching photos:', error);
-        document.getElementById('photoList').innerHTML = '<div class="no-media">Error loading photos</div>';
+        document.getElementById('photoListContainer').innerHTML = '<div class="no-media">Error loading photos</div>';
       }
     }
 
@@ -2478,7 +2934,7 @@
 
     function viewPhoto(url) {
       if (!url) return;
-      window.open(url, '_blank');
+      window.open(url, '_blank', 'width=800,height=600');
     }
 
     /**************** FULL SCREEN MAP FUNCTIONS *****************/
@@ -2513,26 +2969,23 @@
         document.getElementById('bottomUser').textContent = userId;
         document.getElementById('deviceId').textContent = userId;
         fetchAndApply();
-        
-        // Load media with pageSize=2 as requested
-        fetchAudio();
-        fetchPhotos();
       } else {
         applyUnavailableUI();
       }
 
-      // Set default auto refresh to 10 seconds
       document.getElementById('autoRefreshSelect').value = '10000';
       
       if(!autoRefreshTimer) {
          autoRefreshTimer = setInterval(()=>{ fetchAndApply(); }, autoRefreshIntervalMs);
       }
 
-      // Initialize Lucide icons
       lucide.createIcons();
       
-      // Hide exit fullscreen button on init
       document.getElementById('exitFullscreenBtn').style.display = 'none';
+      
+      setTimeout(() => {
+        if (map) map.invalidateSize();
+      }, 500);
     }
 
     /**************** FETCH API *****************/
@@ -2543,7 +2996,6 @@
         return;
       }
 
-      // Set status to Fetching
       setStatus('fetching');
       setText('lastUpdated', 'Fetching...');
 
@@ -2578,7 +3030,6 @@
           return;
         }
 
-        // Valid Data Received -> Set Status to Online
         setStatus('online');
 
         currentLat = lat; 
@@ -2589,7 +3040,6 @@
         accuracyCircle.setLatLng([lat,lng]);
         accuracyCircle.setRadius(acc || 0);
 
-        // Auto-center the map if auto-scroll is ON
         if(isAutoScroll && !isUserPanning){
           map.flyTo([lat, lng], 15, { 
             duration: 0.8,
@@ -2598,7 +3048,7 @@
         }
 
         marker.bindPopup(`
-          <div style="padding: 8px;">
+          <div style="padding: 10px; font-size: 13px;">
             <strong>User:</strong> ${userId}<br>
             <strong>Location:</strong> ${lat.toFixed(6)}, ${lng.toFixed(6)}<br>
             <strong>Time:</strong> ${apiTimestamp ? new Date(apiTimestamp).toLocaleString() : new Date().toLocaleString()}
@@ -2609,7 +3059,6 @@
         setText('bottomUser', data.userId ?? userId);
         setText('bottomDevice', data.device ?? UNAVAIL);
         
-        // Battery information
         const battLevel = data.batteryPercentage ?? data.battery;
         const isCharging = data.isCharging ?? data.charging;
 
@@ -2624,7 +3073,6 @@
         setText('lngVal', lng.toFixed(6));
         setText('accVal', data.accuracy ? `${Math.round(data.accuracy)} meters` : UNAVAIL);
 
-        // Update address
         const addrVal = document.getElementById('addrVal');
         if(data.address) {
           addrVal.innerHTML = `
@@ -2661,7 +3109,6 @@
 
         setText('bottomDevice', data.device ?? UNAVAIL);
 
-        // Enable directions button
         setAttrDisabled(document.getElementById('dirBtn'), false);
 
       } catch(err){
@@ -2676,7 +3123,6 @@
       setText('deviceId', data && data.userId ? data.userId : (uid || UNAVAIL));
       setText('bottomUser', data && data.userId ? data.userId : (uid || UNAVAIL));
       
-      // Set status to Offline
       setStatus('offline');
 
       const batt = data ? (data.batteryPercentage ?? data.battery) : null;
@@ -2709,7 +3155,7 @@
         return;
       }
       const url = `https://www.google.com/maps/dir/?api=1&destination=${currentLat},${currentLng}&travelmode=driving`;
-      window.open(url, '_blank');
+      window.open(url, '_blank', 'width=1200,height=800');
     }
 
     /**************** SETTINGS UI *****************/
@@ -2719,7 +3165,6 @@
       if(isAutoScroll) {
         el.classList.add('on');
         if(currentLat && currentLng){
-          // Center map to live location when turned ON
           map.flyTo([currentLat, currentLng], map.getZoom(), { 
             duration: 0.8,
             easeLinearity: 0.3
@@ -2761,12 +3206,11 @@
         initDashboard();
       } else {
         document.getElementById('loginModal').style.display = 'flex';
+        document.getElementById('loginModal').classList.add('active');
       }
 
-      // Initialize Lucide icons
       lucide.createIcons();
       
-      // Hide exit fullscreen button on page load
       document.getElementById('exitFullscreenBtn').style.display = 'none';
     });
 
@@ -2786,6 +3230,10 @@
     window.changePhotoPage = changePhotoPage;
     window.playAudio = playAudio;
     window.viewPhoto = viewPhoto;
+    window.openAudioPanel = openAudioPanel;
+    window.closeAudioPanel = closeAudioPanel;
+    window.openPhotoPanel = openPhotoPanel;
+    window.closePhotoPanel = closePhotoPanel;
   </script>
 </body>
 </html>
