@@ -1388,67 +1388,81 @@
     }
 
     /* FULLSCREEN MAP */
-    .glass-card.fullscreen-map {
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      z-index: 9999 !important;
-      margin: 0 !important;
-      border-radius: 0 !important;
-      background: #000 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      padding: 0 !important;
-      border: none !important;
-      box-shadow: none !important;
-      backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
-      transition: var(--transition);
-    }
+.glass-card.fullscreen-map {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  background: #000 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transition: var(--transition);
+}
 
-    .fullscreen-map .dash-header,
-    .fullscreen-map .left-col,
-    .fullscreen-map .bottom-row,
-    .fullscreen-map .media-panel,
-    .fullscreen-map .logs-column {
-      display: none !important;
-    }
+/* hide other sections */
+.fullscreen-map .dash-header,
+.fullscreen-map .left-col,
+.fullscreen-map .bottom-row,
+.fullscreen-map .media-panel,
+.fullscreen-map .logs-column {
+  display: none !important;
+}
 
-    .fullscreen-map .map-card {
-      flex: 1;
-      margin: 0 !important;
-      padding: 0 !important;
-      border: none !important;
-      box-shadow: none !important;
-      border-radius: 0 !important;
-      background: transparent !important;
-    }
+/* IMPORTANT: kill the grid and make the map take full space */
+.fullscreen-map .dash-main {
+  display: block;        /* no 280px + 1fr grid */
+  padding: 0;
+  height: 100%;
+}
 
-    .fullscreen-map .map-frame {
-      height: 100vh !important;
-      width: 100vw !important;
-      border-radius: 0 !important;
-      padding: 0 !important;
-      border: none !important;
-      box-shadow: none !important;
-      background: transparent !important;
-      backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
-    }
+/* Map card should fill everything and NOT clip children */
+.fullscreen-map .map-card {
+  flex: none;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  background: #000 !important;
+  height: 100%;
+  width: 100%;
+  overflow: visible;     /* <--- was hidden before */
+}
 
-    .fullscreen-map #map {
-      height: 100vh !important;
-      width: 100vw !important;
-      border-radius: 0 !important;
-      background: #000 !important;
-    }
+/* Inner frame + map = 100% of card */
+.fullscreen-map .map-frame {
+  height: 100% !important;
+  width: 100% !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
 
-    .fullscreen-map .map-header,
-    .fullscreen-map .map-controls {
-      display: none !important;
-    }
+.fullscreen-map #map {
+  height: 100% !important;
+  width: 100% !important;
+  border-radius: 0 !important;
+  background: #000 !important;
+}
+
+/* optional: hide header/controls inside map in fullscreen */
+.fullscreen-map .map-header,
+.fullscreen-map .map-controls {
+  display: none !important;
+}
 
     /* Exit Fullscreen Button */
     .exit-fullscreen-btn {
@@ -2666,28 +2680,49 @@ async function initVerification() {
 
     /**************** FULL SCREEN MAP FUNCTIONS *****************/
     function enterFullScreenMap() {
-      const dashboard = document.getElementById('dashboard');
-      const exitBtn = document.getElementById('exitFullscreenBtn');
-      
-      dashboard.classList.add('fullscreen-map');
-      exitBtn.style.display = 'flex';
-      
-      setTimeout(() => {
-        if (map) map.invalidateSize();
-      }, 350);
+  const dashboard = document.getElementById('dashboard');
+  const exitBtn = document.getElementById('exitFullscreenBtn');
+
+  dashboard.classList.add('fullscreen-map');
+  exitBtn.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+
+  // Important: resize + recenter after fullscreen transition finishes
+  setTimeout(() => {
+    if (map) {
+      map.invalidateSize();
+
+      if (currentLat && currentLng) {
+        map.setView([currentLat, currentLng], map.getZoom() || 15, {
+          animate: false
+        });
+      }
     }
+  }, 400); // slightly more than CSS transition (0.35s)
+}
+
 
     function exitFullScreenMap() {
-      const dashboard = document.getElementById('dashboard');
-      const exitBtn = document.getElementById('exitFullscreenBtn');
-      
-      dashboard.classList.remove('fullscreen-map');
-      exitBtn.style.display = 'none';
-      
-      setTimeout(() => {
-        if (map) map.invalidateSize();
-      }, 350);
+  const dashboard = document.getElementById('dashboard');
+  const exitBtn = document.getElementById('exitFullscreenBtn');
+
+  dashboard.classList.remove('fullscreen-map');
+  exitBtn.style.display = 'none';
+  document.body.style.overflow = '';
+
+  setTimeout(() => {
+    if (map) {
+      map.invalidateSize();
+
+      if (currentLat && currentLng) {
+        map.setView([currentLat, currentLng], map.getZoom() || 15, {
+          animate: false
+        });
+      }
     }
+  }, 400);
+}
+
 
     /**************** DASHBOARD INIT *****************/
     function initDashboard(){
