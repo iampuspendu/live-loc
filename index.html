@@ -1489,145 +1489,6 @@
       display: flex;
     }
 
-    /* Login Modal - Dark Glass Theme */
-    .login-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-    }
-    
-    .login-modal.active {
-      display: flex;
-    }
-
-    .login-container {
-      background: var(--bg-main);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-radius: var(--radius-xl);
-      padding: 40px;
-      width: min(400px, 90%);
-      box-shadow: var(--shadow-lg);
-      border: 1px solid var(--card-border);
-      text-align: center;
-    }
-    
-    .login-logo {
-      margin-bottom: 24px;
-    }
-    
-    .login-logo h1 {
-      color: var(--text-main);
-      margin: 0 0 10px 0;
-      font-size: 28px;
-      font-weight: 700;
-    }
-    
-    .login-logo p {
-      color: var(--text-muted);
-      margin: 0;
-      font-size: 14px;
-    }
-    
-    .login-form {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      margin-top: 24px;
-    }
-    
-    .form-group {
-      text-align: left;
-    }
-    
-    .form-group label {
-      display: block;
-      color: var(--text-main);
-      margin-bottom: 8px;
-      font-size: 14px;
-      font-weight: 500;
-    }
-    
-    .form-group input {
-      width: 100%;
-      padding: 14px 16px;
-      border-radius: var(--radius);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text-main);
-      font-size: 15px;
-      transition: var(--transition-fast);
-      font-family: 'Poppins', sans-serif;
-    }
-    
-    .form-group input:focus {
-      outline: none;
-      border-color: var(--accent);
-      background: rgba(255, 255, 255, 0.08);
-      box-shadow: 0 0 0 3px rgba(58, 111, 240, 0.1);
-    }
-    
-    .login-btn {
-      background: var(--accent);
-      color: white;
-      border: none;
-      padding: 14px;
-      border-radius: var(--radius);
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition-fast);
-      margin-top: 8px;
-      font-family: 'Poppins', sans-serif;
-    }
-    
-    .login-btn:hover {
-      background: #2a5ce6;
-      transform: translateY(-1px);
-    }
-
-    .login-btn:disabled {
-      background: rgba(255, 255, 255, 0.1);
-      cursor: not-allowed;
-      opacity: 0.7;
-    }
-    
-    .login-footer {
-      margin-top: 24px;
-      color: var(--text-muted);
-      font-size: 13px;
-    }
-
-    /* Error Message Style */
-    .login-error {
-      color: var(--danger);
-      font-size: 14px;
-      font-weight: 500;
-      margin-top: -10px;
-      margin-bottom: 4px;
-      min-height: 20px;
-      display: none;
-      text-align: center;
-    }
-
-    @keyframes shake {
-      0% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      50% { transform: translateX(5px); }
-      75% { transform: translateX(-5px); }
-      100% { transform: translateX(0); }
-    }
-    .shake {
-      animation: shake 0.3s ease-in-out;
-    }
-
     /* Desktop-specific enhancements */
     body::-webkit-scrollbar {
       width: 8px;
@@ -1683,120 +1544,6 @@
         width: 380px;
       }
     }
-
-    /* Enhanced responsive height adjustments 
-    @media (max-height: 850px) {
-      .glass-card {
-        height: min(720px, calc(100vh - 30px));
-      }
-      
-      .dash-main {
-        height: calc(100% - 70px);
-      }
-      
-      .media-panel {
-        height: 80px;
-        min-height: 70px;
-        padding: 16px;
-      }
-      
-      .map-frame {
-        padding: 16px;
-      }
-      
-      .card {
-        padding: 16px;
-      }
-    }
-
-    @media (max-height: 768px) {
-      .glass-card {
-        height: min(680px, calc(100vh - 20px));
-      }
-      
-      .dash-main {
-        height: calc(100% - 65px);
-        overflow-y: auto;
-        min-height: 500px;
-      }
-      
-      .dash-header {
-        padding: 14px 20px 10px;
-      }
-      
-      .dash-main {
-        padding: 0 20px 12px;
-        gap: 12px;
-      }
-      
-      .card {
-        padding: 14px;
-      }
-      
-      .map-frame {
-        padding: 14px;
-      }
-      
-      .media-panel {
-        padding: 14px;
-        height: 70px;
-        min-height: 60px;
-      }
-      
-      .media-tile {
-        padding: 12px;
-      }
-      
-      #map {
-        min-height: 200px;
-      }
-      
-      .logs-panel {
-        padding: 14px;
-      }
-    }
-
-    @media (max-height: 700px) {
-      .glass-card {
-        height: min(650px, calc(100vh - 20px));
-      }
-      
-      .dash-main {
-        height: calc(100% - 60px);
-      }
-      
-      .media-panel {
-        height: 60px;
-        min-height: 50px;
-        padding: 12px;
-      }
-      
-      .media-tile {
-        padding: 10px;
-      }
-      
-      .media-tile-icon {
-        width: 32px;
-        height: 32px;
-      }
-      
-      .media-tile-icon i {
-        width: 18px;
-        height: 18px;
-      }
-      
-      .media-tile-info h4 {
-        font-size: 13px;
-      }
-      
-      .media-tile-info p {
-        font-size: 11px;
-      }
-      
-      #map {
-        min-height: 180px;
-      }
-    } */
 
     /* Specific adjustments for 1366×768 screens */
     @media (max-height: 768px) and (max-width: 1366px) {
@@ -1898,7 +1645,7 @@
   <div class="video-overlay"></div>
 
   <!-- MAIN DASHBOARD -->
-  <div class="glass-card blurred-bg" id="dashboard">
+  <div class="glass-card" id="dashboard">
     <!-- Header with Status Strip -->
     <div class="dash-header">
       <div class="header-content">
@@ -2202,47 +1949,23 @@
     Exit Full Screen
   </button>
 
-  <!-- LOGIN MODAL -->
-  <div id="loginModal" class="login-modal">
-    <div class="login-container" id="loginContainer">
-      <div class="login-logo">
-        <h1>Public Safety System</h1>
-        <p>Desktop Tracking Dashboard</p>
-      </div>
-      
-      <form id="loginForm" class="login-form">
-        <div class="form-group">
-          <label for="userIdInput">User ID</label>
-          <input 
-            type="text" 
-            id="userIdInput" 
-            placeholder="Enter your User ID" 
-            required
-            autocomplete="off"
-          >
-        </div>
-        
-        <div id="loginError" class="login-error">User not found</div>
-
-        <button type="submit" id="loginBtn" class="login-btn">Access Dashboard</button>
-      </form>
-      
-      <div class="login-footer">
-        Enter your assigned User ID to access the tracking system
-      </div>
-    </div>
-  </div>
-
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    /**************** AUTHENTICATION SYSTEM *****************/
+    /**************** REDIRECT SYSTEM *****************/
     const API_URL = 'https://jwki58wsv8.execute-api.ap-south-1.amazonaws.com/prod/location';
     const HISTORY_API_URL = 'https://jwki58wsv8.execute-api.ap-south-1.amazonaws.com/prod/location/history';
     const PHOTOS_API_URL = 'https://jwki58wsv8.execute-api.ap-south-1.amazonaws.com/prod/media/photos';
     const AUDIO_API_URL = 'https://jwki58wsv8.execute-api.ap-south-1.amazonaws.com/prod/media/audio';
+    const WORKER_URL = 'https://track.themidb.workers.dev';
 
+    // Check if device is mobile
+    function isMobileDevice() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
+    // Get URL parameters
     function getUrlParams(){
       return Object.fromEntries(new URLSearchParams(window.location.search).entries());
     }
@@ -2251,69 +1974,73 @@
       const p = getUrlParams();
       return p.userId || p.userid || p.id || null;
     }
-    
-    function updateUrlUser(userId){
-      const u = new URL(window.location);
-      if(userId) u.searchParams.set('userId', userId); 
-      else u.searchParams.delete('userId');
-      window.history.replaceState({}, '', u);
+
+    // Redirect to worker URL
+    function redirectToWorker(userId = null) {
+      const url = userId ? `${WORKER_URL}?userId=${encodeURIComponent(userId)}` : WORKER_URL;
+      window.location.href = url;
     }
-    
-    async function verifyAndLogin(userId) {
-      const btn = document.getElementById('loginBtn');
-      const errorMsg = document.getElementById('loginError');
-      const container = document.getElementById('loginContainer');
 
-      errorMsg.style.display = 'none';
-      btn.disabled = true;
-      btn.textContent = 'Verifying...';
-      container.classList.remove('shake');
+    // Check API response for invalid user
+async function verifyUserId(userId) {
+  try {
+    const response = await fetch(`${API_URL}?userId=${encodeURIComponent(userId)}`);
+    const json = await response.json();
 
+    let payload;
+    if (json && typeof json === 'object' && json.body) {
       try {
-        const response = await fetch(`${API_URL}?userId=${encodeURIComponent(userId)}`);
-        const json = await response.json();
-
-        let payload;
-        if(json && typeof json === 'object' && json.body){
-           try{ payload = typeof json.body === 'string' ? JSON.parse(json.body) : json.body; } catch(e){ payload = json.body; }
-        } else {
-           payload = json;
-        }
-
-        if (payload.success === false || payload.success === 'false' || payload.error || (!payload && !payload.data)) {
-            throw new Error("User not found");
-        }
-
-        updateUrlUser(userId);
-        
-        document.getElementById('loginModal').classList.remove('active');
-        document.getElementById('loginModal').style.display = 'none';
-        document.getElementById('dashboard').classList.remove('blurred-bg');
-        
-        initDashboard();
-        
-        btn.disabled = false;
-        btn.textContent = 'Access Dashboard';
-
-      } catch (err) {
-        console.log("Verification failed:", err);
-        errorMsg.style.display = 'block';
-        errorMsg.textContent = 'User not found';
-        container.classList.add('shake');
-        btn.disabled = false;
-        btn.textContent = 'Access Dashboard';
-        
-        setTimeout(() => {
-            container.classList.remove('shake');
-        }, 500);
+        payload = typeof json.body === 'string' ? JSON.parse(json.body) : json.body;
+      } catch (e) {
+        payload = json.body;
       }
+    } else {
+      payload = json;
     }
-    
-    function showUserInfo() {
-      const userId = getUserId();
-      alert(`Current User ID: ${userId}\n\nPublic Safety Tracking System v2.1 Desktop Edition`);
+
+    // Only invalid if API explicitly says so
+    if (payload.status === false || payload.success === false || payload.error) {
+      return false;
     }
-    
+
+    // VALID even if payload.data is missing
+    return true;
+
+  } catch (err) {
+    console.error('Verification failed:', err);
+
+
+    return false;
+  }
+}
+
+    // Initial verification and redirect logic
+async function initVerification() {
+  const userId = getUserId();
+
+  // Rule 1 → Mobile device always goes to worker
+  if (isMobileDevice()) {
+    redirectToWorker(userId);
+    return false;
+  }
+
+  // Rule 2 → Missing userId → redirect
+  if (!userId) {
+    redirectToWorker();
+    return false;
+  }
+
+  // Rule 3 → Invalid ID → redirect WITH the same ID
+  const isValid = await verifyUserId(userId);
+  if (!isValid) {
+    redirectToWorker();
+    return false;
+  }
+
+  // Only valid desktop users load dashboard
+  return true;
+}
+
     /**************** DASHBOARD FUNCTIONALITY *****************/
     let autoRefreshIntervalMs = 10000; // Default to 10 seconds
     let autoRefreshTimer = null;
@@ -3187,30 +2914,29 @@
       }
     }
 
-    /**************** DOM INITIALIZATION *****************/
-    document.addEventListener('DOMContentLoaded', () => {
-      initMap(); 
-      
+    /**************** USER INFO *****************/
+    function showUserInfo() {
       const userId = getUserId();
-      
-      document.getElementById('loginForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const inputId = document.getElementById('userIdInput').value.trim();
-        if(inputId) {
-            verifyAndLogin(inputId);
-        }
-      });
+      alert(`Current User ID: ${userId}\n\nPublic Safety Tracking System v2.1 Desktop Edition`);
+    }
 
-      if (userId) {
-        document.getElementById('dashboard').classList.remove('blurred-bg');
-        initDashboard();
-      } else {
-        document.getElementById('loginModal').style.display = 'flex';
-        document.getElementById('loginModal').classList.add('active');
+    /**************** DOM INITIALIZATION *****************/
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Run verification first
+      const isValidUser = await initVerification();
+      
+      if (!isValidUser) {
+        // If verification failed, we should have redirected already
+        // But just in case, hide the dashboard
+        document.getElementById('dashboard').style.display = 'none';
+        return;
       }
-
-      lucide.createIcons();
       
+      // If we reach here, user is valid and not on mobile
+      initMap();
+      initDashboard();
+      
+      lucide.createIcons();
       document.getElementById('exitFullscreenBtn').style.display = 'none';
     });
 
