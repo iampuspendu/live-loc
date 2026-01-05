@@ -858,7 +858,236 @@
       background: rgba(255, 255, 255, 0.25);
     }
 
-    /* Media Items */
+    /* Audio Player Styles - NEW */
+    .audio-player-container {
+      margin-top: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: var(--radius);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 16px;
+      display: none;
+    }
+
+    .audio-player-container.active {
+      display: block;
+    }
+
+    .audio-player-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .audio-player-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .audio-player-title i {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2;
+      color: var(--accent);
+    }
+
+    .audio-player-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 6px;
+      border-radius: var(--radius);
+      transition: var(--transition-fast);
+    }
+
+    .audio-player-close:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+    }
+
+    .audio-player-close i {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2;
+    }
+
+    .audio-player-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .audio-player-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .audio-player-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .audio-player-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.05);
+    }
+
+    .audio-player-btn.play-pause {
+      background: var(--accent);
+      border-color: var(--accent);
+      width: 48px;
+      height: 48px;
+    }
+
+    .audio-player-btn.play-pause:hover {
+      background: var(--accent-light);
+      border-color: var(--accent-light);
+    }
+
+    .audio-player-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .audio-player-btn i {
+      width: 18px;
+      height: 18px;
+      stroke-width: 2;
+    }
+
+    .audio-player-btn.play-pause i {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Timeline Slider */
+    .audio-player-timeline {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .audio-player-time {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+      min-width: 45px;
+      text-align: center;
+    }
+
+    .audio-player-slider-container {
+      flex: 1;
+      position: relative;
+      height: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .audio-player-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .audio-player-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 0 0 2px rgba(58, 111, 240, 0.3);
+      transition: var(--transition-fast);
+    }
+
+    .audio-player-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+      box-shadow: 0 0 0 3px rgba(58, 111, 240, 0.4);
+    }
+
+    .audio-player-slider::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 0 0 2px rgba(58, 111, 240, 0.3);
+    }
+
+    .audio-player-slider-progress {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 4px;
+      background: var(--accent);
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Volume Control */
+    .audio-player-volume {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .audio-player-volume i {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2;
+      color: var(--text-muted);
+    }
+
+    .audio-player-volume-slider {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      outline: none;
+    }
+
+    .audio-player-volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--text-main);
+      cursor: pointer;
+    }
+
+    /* Media Items - Updated for Audio Player */
     .media-item {
       padding: 12px 14px;
       display: flex;
@@ -875,6 +1104,17 @@
 
     .media-item:last-child {
       border-bottom: none;
+    }
+
+    .media-item.playing {
+      background: rgba(58, 111, 240, 0.1);
+      border: 1px solid rgba(58, 111, 240, 0.2);
+      border-radius: var(--radius);
+    }
+
+    .media-item.playing .media-action {
+      background: var(--accent);
+      color: white;
     }
 
     .media-thumbnail {
@@ -949,6 +1189,11 @@
       height: 14px;
       stroke-width: 2;
       color: var(--text-main);
+    }
+
+    .media-action.playing i {
+      width: 14px;
+      height: 14px;
     }
 
     .no-media {
@@ -1388,81 +1633,81 @@
     }
 
     /* FULLSCREEN MAP */
-.glass-card.fullscreen-map {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  z-index: 9999 !important;
-  margin: 0 !important;
-  border-radius: 0 !important;
-  background: #000 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  padding: 0 !important;
-  border: none !important;
-  box-shadow: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  transition: var(--transition);
-}
+    .glass-card.fullscreen-map {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      z-index: 9999 !important;
+      margin: 0 !important;
+      border-radius: 0 !important;
+      background: #000 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      padding: 0 !important;
+      border: none !important;
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      transition: var(--transition);
+    }
 
-/* hide other sections */
-.fullscreen-map .dash-header,
-.fullscreen-map .left-col,
-.fullscreen-map .bottom-row,
-.fullscreen-map .media-panel,
-.fullscreen-map .logs-column {
-  display: none !important;
-}
+    /* hide other sections */
+    .fullscreen-map .dash-header,
+    .fullscreen-map .left-col,
+    .fullscreen-map .bottom-row,
+    .fullscreen-map .media-panel,
+    .fullscreen-map .logs-column {
+      display: none !important;
+    }
 
-/* IMPORTANT: kill the grid and make the map take full space */
-.fullscreen-map .dash-main {
-  display: block;        /* no 280px + 1fr grid */
-  padding: 0;
-  height: 100%;
-}
+    /* IMPORTANT: kill the grid and make the map take full space */
+    .fullscreen-map .dash-main {
+      display: block;
+      padding: 0;
+      height: 100%;
+    }
 
-/* Map card should fill everything and NOT clip children */
-.fullscreen-map .map-card {
-  flex: none;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: none !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-  background: #000 !important;
-  height: 100%;
-  width: 100%;
-  overflow: visible;     /* <--- was hidden before */
-}
+    /* Map card should fill everything and NOT clip children */
+    .fullscreen-map .map-card {
+      flex: none;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      background: #000 !important;
+      height: 100%;
+      width: 100%;
+      overflow: visible;
+    }
 
-/* Inner frame + map = 100% of card */
-.fullscreen-map .map-frame {
-  height: 100% !important;
-  width: 100% !important;
-  border-radius: 0 !important;
-  padding: 0 !important;
-  border: none !important;
-  box-shadow: none !important;
-  background: transparent !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-}
+    /* Inner frame + map = 100% of card */
+    .fullscreen-map .map-frame {
+      height: 100% !important;
+      width: 100% !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      border: none !important;
+      box-shadow: none !important;
+      background: transparent !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
 
-.fullscreen-map #map {
-  height: 100% !important;
-  width: 100% !important;
-  border-radius: 0 !important;
-  background: #000 !important;
-}
+    .fullscreen-map #map {
+      height: 100% !important;
+      width: 100% !important;
+      border-radius: 0 !important;
+      background: #000 !important;
+    }
 
-/* optional: hide header/controls inside map in fullscreen */
-.fullscreen-map .map-header,
-.fullscreen-map .map-controls {
-  display: none !important;
-}
+    /* optional: hide header/controls inside map in fullscreen */
+    .fullscreen-map .map-header,
+    .fullscreen-map .map-controls {
+      display: none !important;
+    }
 
     /* Exit Fullscreen Button */
     .exit-fullscreen-btn {
@@ -1583,6 +1828,10 @@
         min-width: 110px;
         padding: 8px 12px;
         font-size: 12px;
+      }
+      
+      .audio-player-container {
+        padding: 12px;
       }
     }
 
@@ -1905,7 +2154,7 @@
     </div>
   </div>
 
-  <!-- Audio Overlay Panel -->
+  <!-- Audio Overlay Panel with Enhanced Audio Player -->
   <div class="overlay" id="audioOverlay">
     <div class="overlay-content">
       <div class="overlay-header">
@@ -1914,6 +2163,50 @@
           <i data-lucide="x"></i>
         </button>
       </div>
+      
+      <!-- Audio Player Container -->
+      <div class="audio-player-container" id="audioPlayerContainer">
+        <div class="audio-player-header">
+          <div class="audio-player-title">
+            <i data-lucide="volume-2"></i>
+            <span id="audioPlayerTitle">No audio selected</span>
+          </div>
+          <button class="audio-player-close" onclick="closeAudioPlayer()">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        
+        <div class="audio-player-controls">
+          <div class="audio-player-buttons">
+            <button class="audio-player-btn" onclick="skipBackward()" disabled id="skipBackwardBtn">
+              <i data-lucide="skip-back"></i>
+            </button>
+            <button class="audio-player-btn play-pause" onclick="togglePlayPause()" id="playPauseBtn">
+              <i data-lucide="play" id="playPauseIcon"></i>
+            </button>
+            <button class="audio-player-btn" onclick="skipForward()" disabled id="skipForwardBtn">
+              <i data-lucide="skip-forward"></i>
+            </button>
+          </div>
+          
+          <div class="audio-player-timeline">
+            <div class="audio-player-time" id="currentTime">0:00</div>
+            <div class="audio-player-slider-container">
+              <input type="range" class="audio-player-slider" min="0" max="100" value="0" 
+                     id="audioProgressSlider" oninput="seekAudio(event)">
+              <div class="audio-player-slider-progress" id="audioProgressBar"></div>
+            </div>
+            <div class="audio-player-time" id="durationTime">0:00</div>
+          </div>
+          
+          <div class="audio-player-volume">
+            <i data-lucide="volume-2"></i>
+            <input type="range" class="audio-player-volume-slider" min="0" max="100" value="80"
+                   id="volumeSlider" oninput="changeVolume(event)">
+          </div>
+        </div>
+      </div>
+      
       <div class="overlay-body">
         <div class="media-list-container" id="audioListContainer">
           <div class="no-media">Loading audio...</div>
@@ -1967,6 +2260,273 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
+    /**************** AUDIO PLAYER ENHANCEMENTS *****************/
+    
+    // Global audio state
+    let currentAudio = null;
+    let currentAudioElement = null;
+    let currentAudioUrl = null;
+    let currentAudioIndex = -1;
+    let isPlaying = false;
+    let audioUpdateInterval = null;
+    let audioItems = [];
+
+    // Format time from seconds to MM:SS
+    function formatTime(seconds) {
+      if (isNaN(seconds) || !isFinite(seconds)) return "0:00";
+      
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = Math.floor(seconds % 60);
+      return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
+
+    // Initialize audio player
+    function initAudioPlayer() {
+      const audioPlayerContainer = document.getElementById('audioPlayerContainer');
+      const volumeSlider = document.getElementById('volumeSlider');
+      
+      // Set initial volume
+      if (volumeSlider) {
+        currentAudioElement.volume = volumeSlider.value / 100;
+      }
+      
+      // Update UI
+      updateAudioPlayerUI();
+    }
+
+    // Update audio player UI
+    function updateAudioPlayerUI() {
+      if (!currentAudioElement) return;
+      
+      const playPauseBtn = document.getElementById('playPauseBtn');
+      const playPauseIcon = document.getElementById('playPauseIcon');
+      const skipBackwardBtn = document.getElementById('skipBackwardBtn');
+      const skipForwardBtn = document.getElementById('skipForwardBtn');
+      const currentTimeEl = document.getElementById('currentTime');
+      const durationTimeEl = document.getElementById('durationTime');
+      const audioProgressSlider = document.getElementById('audioProgressSlider');
+      const audioProgressBar = document.getElementById('audioProgressBar');
+      
+      // Update play/pause button
+      if (isPlaying) {
+        playPauseIcon.setAttribute('data-lucide', 'pause');
+        lucide.createIcons();
+      } else {
+        playPauseIcon.setAttribute('data-lucide', 'play');
+        lucide.createIcons();
+      }
+      
+      // Update time display
+      currentTimeEl.textContent = formatTime(currentAudioElement.currentTime);
+      
+      // Update duration if available
+      if (currentAudioElement.duration && isFinite(currentAudioElement.duration)) {
+        durationTimeEl.textContent = formatTime(currentAudioElement.duration);
+      }
+      
+      // Update progress slider
+      if (currentAudioElement.duration && isFinite(currentAudioElement.duration)) {
+        const progress = (currentAudioElement.currentTime / currentAudioElement.duration) * 100;
+        audioProgressSlider.value = progress;
+        audioProgressBar.style.width = `${progress}%`;
+      }
+      
+      // Enable/disable buttons
+      skipBackwardBtn.disabled = !currentAudioElement || currentAudioElement.currentTime <= 1;
+      skipForwardBtn.disabled = !currentAudioElement;
+      
+      // Update playing item highlight
+      updatePlayingItemHighlight();
+    }
+
+    // Update playing item highlight
+    function updatePlayingItemHighlight() {
+      // Remove playing class from all items
+      document.querySelectorAll('.media-item').forEach(item => {
+        item.classList.remove('playing');
+        const actionBtn = item.querySelector('.media-action');
+        if (actionBtn) {
+          actionBtn.classList.remove('playing');
+          const icon = actionBtn.querySelector('i');
+          if (icon) {
+            icon.setAttribute('data-lucide', 'play');
+          }
+        }
+      });
+      
+      // Add playing class to current item
+      if (currentAudioIndex >= 0 && audioItems[currentAudioIndex]) {
+        const currentItem = document.querySelector(`.media-item[data-audio-index="${currentAudioIndex}"]`);
+        if (currentItem) {
+          currentItem.classList.add('playing');
+          const actionBtn = currentItem.querySelector('.media-action');
+          if (actionBtn) {
+            actionBtn.classList.add('playing');
+            const icon = actionBtn.querySelector('i');
+            if (icon) {
+              icon.setAttribute('data-lucide', isPlaying ? 'pause' : 'play');
+              lucide.createIcons();
+            }
+          }
+        }
+      }
+    }
+
+    // Toggle play/pause
+    function togglePlayPause() {
+      if (!currentAudioElement) return;
+      
+      if (isPlaying) {
+        pauseAudio();
+      } else {
+        playAudio();
+      }
+    }
+
+    // Play audio
+    function playAudio() {
+      if (!currentAudioElement) return;
+      
+      // Pause any other playing audio
+      if (window.currentlyPlayingAudio && window.currentlyPlayingAudio !== currentAudioElement) {
+        window.currentlyPlayingAudio.pause();
+        if (window.currentlyPlayingAudio.parentElement) {
+          const prevPlayBtn = window.currentlyPlayingAudio.parentElement.querySelector('.media-action');
+          if (prevPlayBtn) {
+            const icon = prevPlayBtn.querySelector('i');
+            if (icon) {
+              icon.setAttribute('data-lucide', 'play');
+              lucide.createIcons();
+            }
+          }
+        }
+      }
+      
+      currentAudioElement.play()
+        .then(() => {
+          isPlaying = true;
+          window.currentlyPlayingAudio = currentAudioElement;
+          
+          // Start update interval
+          if (audioUpdateInterval) clearInterval(audioUpdateInterval);
+          audioUpdateInterval = setInterval(updateAudioPlayerUI, 100);
+          
+          updateAudioPlayerUI();
+        })
+        .catch(error => {
+          console.error('Error playing audio:', error);
+          alert('Unable to play audio. Please check the audio file.');
+        });
+    }
+
+    // Pause audio
+    function pauseAudio() {
+      if (!currentAudioElement) return;
+      
+      currentAudioElement.pause();
+      isPlaying = false;
+      
+      // Clear update interval
+      if (audioUpdateInterval) {
+        clearInterval(audioUpdateInterval);
+        audioUpdateInterval = null;
+      }
+      
+      updateAudioPlayerUI();
+    }
+
+    // Load and play specific audio
+    function loadAndPlayAudio(audioUrl, audioName, index) {
+      // Stop current audio if playing
+      if (currentAudioElement && isPlaying) {
+        pauseAudio();
+      }
+      
+      // Create new audio element
+      currentAudioElement = new Audio(audioUrl);
+      currentAudioUrl = audioUrl;
+      currentAudioIndex = index;
+      
+      // Set up event listeners
+      currentAudioElement.addEventListener('loadedmetadata', () => {
+        document.getElementById('audioPlayerTitle').textContent = audioName;
+        document.getElementById('durationTime').textContent = formatTime(currentAudioElement.duration);
+        updateAudioPlayerUI();
+      });
+      
+      currentAudioElement.addEventListener('ended', () => {
+        isPlaying = false;
+        if (audioUpdateInterval) {
+          clearInterval(audioUpdateInterval);
+          audioUpdateInterval = null;
+        }
+        updateAudioPlayerUI();
+      });
+      
+      currentAudioElement.addEventListener('error', (error) => {
+        console.error('Audio error:', error);
+        alert('Error loading audio file');
+        pauseAudio();
+      });
+      
+      // Initialize player
+      initAudioPlayer();
+      
+      // Show player container
+      document.getElementById('audioPlayerContainer').classList.add('active');
+      
+      // Play the audio
+      playAudio();
+    }
+
+    // Seek audio
+    function seekAudio(event) {
+      if (!currentAudioElement || !currentAudioElement.duration) return;
+      
+      const seekTime = (event.target.value / 100) * currentAudioElement.duration;
+      currentAudioElement.currentTime = seekTime;
+      updateAudioPlayerUI();
+    }
+
+    // Change volume
+    function changeVolume(event) {
+      if (currentAudioElement) {
+        currentAudioElement.volume = event.target.value / 100;
+      }
+    }
+
+    // Skip backward
+    function skipBackward() {
+      if (!currentAudioElement) return;
+      
+      currentAudioElement.currentTime = Math.max(0, currentAudioElement.currentTime - 10);
+      updateAudioPlayerUI();
+    }
+
+    // Skip forward
+    function skipForward() {
+      if (!currentAudioElement) return;
+      
+      currentAudioElement.currentTime = Math.min(
+        currentAudioElement.duration,
+        currentAudioElement.currentTime + 10
+      );
+      updateAudioPlayerUI();
+    }
+
+    // Close audio player
+    function closeAudioPlayer() {
+      if (currentAudioElement && isPlaying) {
+        pauseAudio();
+      }
+      
+      document.getElementById('audioPlayerContainer').classList.remove('active');
+      document.getElementById('audioPlayerTitle').textContent = 'No audio selected';
+      
+      // Clear playing highlight
+      updatePlayingItemHighlight();
+    }
+
     /**************** REDIRECT SYSTEM *****************/
     const API_URL = 'https://jwki58wsv8.execute-api.ap-south-1.amazonaws.com/prod/location';
     const HISTORY_API_URL = 'https://jwki58wsv8.execute-api.ap-south-1.amazonaws.com/prod/location/history';
@@ -1996,64 +2556,62 @@
     }
 
     // Check API response for invalid user
-async function verifyUserId(userId) {
-  try {
-    const response = await fetch(`${API_URL}?userId=${encodeURIComponent(userId)}`);
-    const json = await response.json();
-
-    let payload;
-    if (json && typeof json === 'object' && json.body) {
+    async function verifyUserId(userId) {
       try {
-        payload = typeof json.body === 'string' ? JSON.parse(json.body) : json.body;
-      } catch (e) {
-        payload = json.body;
+        const response = await fetch(`${API_URL}?userId=${encodeURIComponent(userId)}`);
+        const json = await response.json();
+
+        let payload;
+        if (json && typeof json === 'object' && json.body) {
+          try {
+            payload = typeof json.body === 'string' ? JSON.parse(json.body) : json.body;
+          } catch (e) {
+            payload = json.body;
+          }
+        } else {
+          payload = json;
+        }
+
+        // Only invalid if API explicitly says so
+        if (payload.status === false || payload.success === false || payload.error) {
+          return false;
+        }
+
+        // VALID even if payload.data is missing
+        return true;
+
+      } catch (err) {
+        console.error('Verification failed:', err);
+        return false;
       }
-    } else {
-      payload = json;
     }
-
-    // Only invalid if API explicitly says so
-    if (payload.status === false || payload.success === false || payload.error) {
-      return false;
-    }
-
-    // VALID even if payload.data is missing
-    return true;
-
-  } catch (err) {
-    console.error('Verification failed:', err);
-
-
-    return false;
-  }
-}
 
     // Initial verification and redirect logic
-async function initVerification() {
-  const userId = getUserId();
+    async function initVerification() {
+      const userId = getUserId();
 
-  // Rule 1 → Mobile device always goes to worker
-  if (isMobileDevice()) {
-    redirectToWorker(userId);
-    return false;
-  }
+      // Rule 1 → Mobile device always goes to worker
+      if (isMobileDevice()) {
+        redirectToWorker(userId);
+        return false;
+      }
 
-  // Rule 2 → Missing userId → redirect
-  if (!userId) {
-    redirectToWorker();
-    return false;
-  }
+      // Rule 2 → Missing userId → redirect
+      if (!userId) {
+        redirectToWorker();
+        return false;
+      }
 
-  // Rule 3 → Invalid ID → redirect WITH the same ID
-  const isValid = await verifyUserId(userId);
-  if (!isValid) {
-    redirectToWorker();
-    return false;
-  }
+      // Rule 3 → Invalid ID → redirect WITH the same ID
+      const isValid = await verifyUserId(userId);
+      if (!isValid) {
+        redirectToWorker();
+        return false;
+      }
 
-  // Only valid desktop users load dashboard
-  return true;
-}
+      // Only valid desktop users load dashboard
+      return true;
+    }
 
     /**************** DASHBOARD FUNCTIONALITY *****************/
     let autoRefreshIntervalMs = 10000; // Default to 10 seconds
@@ -2217,6 +2775,15 @@ async function initVerification() {
     }
 
     function closeAudioPanel() {
+      // Close audio player first
+      closeAudioPlayer();
+      
+      // Stop any playing audio
+      if (currentAudioElement && isPlaying) {
+        pauseAudio();
+      }
+      
+      // Close overlay
       document.getElementById('audioOverlay').classList.remove('active');
     }
 
@@ -2521,7 +3088,7 @@ async function initVerification() {
       }
     }
 
-    /**************** MEDIA FUNCTIONS *****************/
+    /**************** MEDIA FUNCTIONS - ENHANCED AUDIO PLAYBACK *****************/
     async function fetchAudio() {
       const uid = getUserId();
       if (!uid) return;
@@ -2556,12 +3123,13 @@ async function initVerification() {
         document.getElementById('audioPagination').style.display = totalAudioPages > 1 ? 'flex' : 'none';
 
         let audioHTML = '';
-        audioItems.forEach(audio => {
+        audioItems.forEach((audio, index) => {
           const fileName = audio.fileKey ? audio.fileKey.split('/').pop() : 'Recording';
           const time = audio.loggedAt ? new Date(audio.loggedAt).toLocaleString() : 'Unknown time';
+          const playUrl = audio.playUrl || '#';
           
           audioHTML += `
-            <div class="media-item" onclick="playAudio('${audio.playUrl}')">
+            <div class="media-item" data-audio-index="${index}" onclick="playAudioItem('${playUrl}', '${fileName.replace(/'/g, "\\'")}', ${index})">
               <div class="media-thumbnail audio">
                 <i data-lucide="volume-2"></i>
               </div>
@@ -2579,10 +3147,18 @@ async function initVerification() {
         audioList.innerHTML = audioHTML;
         lucide.createIcons();
         
+        // Store audio items for reference
+        window.audioItems = audioItems;
+        
       } catch (error) {
         console.error('Error fetching audio:', error);
         document.getElementById('audioListContainer').innerHTML = '<div class="no-media">Error loading recordings</div>';
       }
+    }
+
+    // Play audio item with enhanced player
+    function playAudioItem(url, name, index) {
+      loadAndPlayAudio(url, name, index);
     }
 
     async function fetchPhotos() {
@@ -2653,6 +3229,9 @@ async function initVerification() {
       if (newPage >= 1 && newPage <= totalAudioPages) {
         currentAudioPage = newPage;
         fetchAudio();
+        
+        // Close player when changing page
+        closeAudioPlayer();
       }
     }
 
@@ -2664,15 +3243,6 @@ async function initVerification() {
       }
     }
 
-    function playAudio(url) {
-      if (!url) return;
-      const audio = new Audio(url);
-      audio.play().catch(e => {
-        console.error('Error playing audio:', e);
-        alert('Unable to play audio. Please try again.');
-      });
-    }
-
     function viewPhoto(url) {
       if (!url) return;
       window.open(url, '_blank', 'width=800,height=600');
@@ -2680,49 +3250,46 @@ async function initVerification() {
 
     /**************** FULL SCREEN MAP FUNCTIONS *****************/
     function enterFullScreenMap() {
-  const dashboard = document.getElementById('dashboard');
-  const exitBtn = document.getElementById('exitFullscreenBtn');
+      const dashboard = document.getElementById('dashboard');
+      const exitBtn = document.getElementById('exitFullscreenBtn');
 
-  dashboard.classList.add('fullscreen-map');
-  exitBtn.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
+      dashboard.classList.add('fullscreen-map');
+      exitBtn.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
 
-  // Important: resize + recenter after fullscreen transition finishes
-  setTimeout(() => {
-    if (map) {
-      map.invalidateSize();
+      setTimeout(() => {
+        if (map) {
+          map.invalidateSize();
 
-      if (currentLat && currentLng) {
-        map.setView([currentLat, currentLng], map.getZoom() || 15, {
-          animate: false
-        });
-      }
+          if (currentLat && currentLng) {
+            map.setView([currentLat, currentLng], map.getZoom() || 15, {
+              animate: false
+            });
+          }
+        }
+      }, 400);
     }
-  }, 400); // slightly more than CSS transition (0.35s)
-}
-
 
     function exitFullScreenMap() {
-  const dashboard = document.getElementById('dashboard');
-  const exitBtn = document.getElementById('exitFullscreenBtn');
+      const dashboard = document.getElementById('dashboard');
+      const exitBtn = document.getElementById('exitFullscreenBtn');
 
-  dashboard.classList.remove('fullscreen-map');
-  exitBtn.style.display = 'none';
-  document.body.style.overflow = '';
+      dashboard.classList.remove('fullscreen-map');
+      exitBtn.style.display = 'none';
+      document.body.style.overflow = '';
 
-  setTimeout(() => {
-    if (map) {
-      map.invalidateSize();
+      setTimeout(() => {
+        if (map) {
+          map.invalidateSize();
 
-      if (currentLat && currentLng) {
-        map.setView([currentLat, currentLng], map.getZoom() || 15, {
-          animate: false
-        });
-      }
+          if (currentLat && currentLng) {
+            map.setView([currentLat, currentLng], map.getZoom() || 15, {
+              animate: false
+            });
+          }
+        }
+      }, 400);
     }
-  }, 400);
-}
-
 
     /**************** DASHBOARD INIT *****************/
     function initDashboard(){
@@ -2961,8 +3528,6 @@ async function initVerification() {
       const isValidUser = await initVerification();
       
       if (!isValidUser) {
-        // If verification failed, we should have redirected already
-        // But just in case, hide the dashboard
         document.getElementById('dashboard').style.display = 'none';
         return;
       }
@@ -2989,12 +3554,20 @@ async function initVerification() {
     window.toggleAutoScroll = toggleAutoScroll;
     window.changeAudioPage = changeAudioPage;
     window.changePhotoPage = changePhotoPage;
-    window.playAudio = playAudio;
     window.viewPhoto = viewPhoto;
     window.openAudioPanel = openAudioPanel;
     window.closeAudioPanel = closeAudioPanel;
     window.openPhotoPanel = openPhotoPanel;
     window.closePhotoPanel = closePhotoPanel;
+    
+    // Audio player functions
+    window.playAudioItem = playAudioItem;
+    window.togglePlayPause = togglePlayPause;
+    window.seekAudio = seekAudio;
+    window.changeVolume = changeVolume;
+    window.skipBackward = skipBackward;
+    window.skipForward = skipForward;
+    window.closeAudioPlayer = closeAudioPlayer;
   </script>
 </body>
 </html>
